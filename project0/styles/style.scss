@@ -1,0 +1,105 @@
+$myFont: "Courier New",
+"sans-serif";
+
+%box {
+    font: myFont;
+    padding: 1.5em;
+    border: .5px solid black;
+    border-radius: .25em;
+    background-color: lightblue;
+    color: black;
+
+    h4 {
+        text-align: center;
+    }
+}
+
+.maintitle {
+    width: 20vw;
+    padding: 0.5em;
+    margin: auto
+}
+
+.courier {
+    font-family: myFont;
+}
+
+img {
+    border-radius: 1.25em;
+    height: 40vh;
+}
+
+.section {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+}
+
+
+
+
+@media only screen and (max-width: 760px) {
+    .mobileTable {
+        transform: scale(0.8);
+        margin: auto;
+        display: flex;
+        justify-content: center;
+    }
+
+    img {
+        width: 200px;
+        height: 200px;
+    }
+
+
+
+}
+
+.centering {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Selectors */
+
+.myList ol>li>ul {
+    font-style: italic
+}
+
+.myList {
+    li:hover {
+        color: blueviolet;
+        transition-delay: .2s;
+    }
+}
+
+#myPhoto:hover {
+    transform: scale(1.25);
+}
+
+.interests>div {
+
+    margin: .5em;
+    word-wrap: break-word;
+}
+
+.interests>div>p:hover::after {
+    opacity: 0.5;
+    content: "\A This is not a link or anything";
+    font-weight: bold;
+    display: block;
+
+}
+
+.interests {
+    display: flex;
+    flex-wrap: wrap;
+
+    div {
+        width: 20em;
+        font-family: myFont;
+        @extend %box
+    }
+}
