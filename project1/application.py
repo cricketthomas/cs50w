@@ -33,5 +33,14 @@ def registered():
     username = request.form.get("username")
     password = request.form.get("password")
 
-    
-    return ("User account: " + username +" created.")
+
+
+    try:
+        db.execute("INSERT INTO users (username, password) VALUES (:username, :password)",
+            {"username": username, "password": password})
+        db.commit()
+        return ("User account: " + username +" created.")
+    except:
+        return render_template("error.html", message="Error: username in use.")
+
+    #db.execute('CREATE TABLE users (username VARCHAR PRIMARY KEY, password VARCHAR NOT NULL)')
