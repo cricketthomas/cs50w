@@ -24,17 +24,17 @@ db = scoped_session(sessionmaker(bind=engine))
 def index():
     return render_template("landing.html")
 
+
+#creating an account
 @app.route("/register", methods=["POST","GET"])
 def register():
     return render_template("register.html")
 
 @app.route('/registered', methods=["POST"])
 def registered():
-    username = request.form.get("username")
+    session['username'] = request.form.get("username")
+    username = session['username'] 
     password = request.form.get("password")
-
-
-
     try:
         db.execute("INSERT INTO users (username, password) VALUES (:username, :password)",
             {"username": username, "password": password})
@@ -42,5 +42,28 @@ def registered():
         return ("User account: " + username +" created.")
     except:
         return render_template("error.html", message="Error: username in use.")
+
+#loggin in to an account
+@app.route("/login", methods=["POST","GET"])
+def login():
+    return render_template("login.html")
+
+@app.route("/loggedin", methods=["POST","GET"])
+def loggedin():
+
+    username = request.form.get("username")
+    password = request.form.get("password")
+    if request.method == 'POST':
+        session['username'] = request.form['username']
+    return 'loggedin'+ session['username'] 
+
+
+
+
+@app.route('/logout')
+def logout():
+   # remove the username from the session if it is there
+   session.pop('username', None)
+   return render_template('landing.html',message='bye')
 
     #db.execute('CREATE TABLE users (username VARCHAR PRIMARY KEY, password VARCHAR NOT NULL)')
