@@ -1,4 +1,5 @@
 import os
+import psycopg2
 from flask import Flask, session, render_template, request
 from flask_session import Session
 from sqlalchemy import create_engine
@@ -50,20 +51,24 @@ def login():
 
 @app.route("/loggedin", methods=["POST","GET"])
 def loggedin():
-
-    username = request.form.get("username")
-    password = request.form.get("password")
     if request.method == 'POST':
-        session['username'] = request.form['username']
-    return 'loggedin'+ session['username'] 
-
-
+        username = request.form.get("username").replace("'", "")
+        password = request.form.get("password")
+        sql = ("SELECT * FROM users WHERE username = :username AND password = :password")
+        users = db.execute(sql, {'username': username, "password": password}).fetchall()      
+        if not users:
+            return 'Error, username or password incorrect or does not exist.'
+        else:
+            return "Sucess"
+            
+       
 
 
 @app.route('/logout')
 def logout():
    # remove the username from the session if it is there
    session.pop('username', None)
+   session.clear()
    return render_template('landing.html',message='bye')
 
     #db.execute('CREATE TABLE users (username VARCHAR PRIMARY KEY, password VARCHAR NOT NULL)')
