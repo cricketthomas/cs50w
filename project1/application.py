@@ -23,7 +23,10 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/")
 def index():
-    return render_template("landing.html")
+    if not session.get('logged_in'):
+        return render_template('login.html')
+    else:
+        return render_template("landing.html")
 
 
 #creating an account
@@ -56,10 +59,12 @@ def loggedin():
         password = request.form.get("password")
         sql = ("SELECT * FROM users WHERE username = :username AND password = :password")
         users = db.execute(sql, {'username': username, "password": password}).fetchall()      
-        if not users:
-            return 'Error, username or password incorrect or does not exist.'
-        else:
+        if users:
+            session['logged_in'] = True
             return "Sucess"
+        else:
+            return 'Error, username or password incorrect or does not exist.'
+
             
        
 
