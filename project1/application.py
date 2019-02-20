@@ -26,7 +26,8 @@ def index():
     if not session.get('logged_in'):
         return render_template('login.html')
     else:
-        return render_template("landing.html")
+        currentUser = session.get('username')
+        return render_template("landing.html",currentUser=currentUser)
 
 
 #creating an account
@@ -61,9 +62,12 @@ def loggedin():
         users = db.execute(sql, {'username': username, "password": password}).fetchall()      
         if users:
             session['logged_in'] = True
-            return "Sucess"
+            session['username'] = username
+            message= "Hi, " + username + '!'
+            return render_template("landing.html",message=message)
         else:
-            return 'Error, username or password incorrect or does not exist.'
+            message = 'Error, username or password incorrect or does not exist.'
+            return render_template("error.html",message=message)
 
             
        

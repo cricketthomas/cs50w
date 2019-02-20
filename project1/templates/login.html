@@ -10,7 +10,9 @@ Login
 {% endblock %}
 
 {% block body %}
-
+{% if session['logged_in'] %}
+<h3>Your already logged in</h3>
+{% else %}
 <form action="{{ url_for('loggedin') }}" method="POST">
     <div class="form-group">
         <input class="input" name="username" placeholder="username">
@@ -20,4 +22,5 @@ Login
         <button class="btn btn-primary">Login</button>
     </div>
 </form>
+{% endif %}
 {% endblock %}
