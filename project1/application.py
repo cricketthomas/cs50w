@@ -27,57 +27,59 @@ def index():
         return render_template('login.html')
     else:
         currentUser = session.get('username')
-        return render_template("landing.html",currentUser=currentUser)
+        return render_template("landing.html", currentUser=currentUser)
 
 
-#creating an account
-@app.route("/register", methods=["POST","GET"])
+# creating an account
+@app.route("/register", methods=["POST", "GET"])
 def register():
     return render_template("register.html")
+
 
 @app.route('/registered', methods=["POST"])
 def registered():
     session['username'] = request.form.get("username")
-    username = session['username'] 
+    username = session['username']
     password = request.form.get("password")
     try:
         db.execute("INSERT INTO users (username, password) VALUES (:username, :password)",
-            {"username": username, "password": password})
+                   {"username": username, "password": password})
         db.commit()
-        return ("User account: " + username +" created.")
+        return ("User account: " + username + " created.")
     except:
         return render_template("error.html", message="Error: username in use.")
 
-#loggin in to an account
-@app.route("/login", methods=["POST","GET"])
+# loggin in to an account
+
+
+@app.route("/login", methods=["POST", "GET"])
 def login():
     return render_template("login.html")
 
-@app.route("/loggedin", methods=["POST","GET"])
+
+@app.route("/loggedin", methods=["POST", "GET"])
 def loggedin():
     if request.method == 'POST':
         username = request.form.get("username").replace("'", "")
         password = request.form.get("password")
         sql = ("SELECT * FROM users WHERE username = :username AND password = :password")
-        users = db.execute(sql, {'username': username, "password": password}).fetchall()      
+        users = db.execute(
+            sql, {'username': username, "password": password}).fetchall()
         if users:
             session['logged_in'] = True
             session['username'] = username
-            message= "Hi, " + username + '!'
-            return render_template("landing.html",message=message)
+            message = "Hi, " + username + '!'
+            return render_template("landing.html", message=message)
         else:
             message = 'Error, username or password incorrect or does not exist.'
-            return render_template("error.html",message=message)
-
-            
-       
+            return render_template("error.html", message=message)
 
 
 @app.route('/logout')
 def logout():
-   # remove the username from the session if it is there
-   session.pop('username', None)
-   session.clear()
-   return render_template('landing.html',message='bye')
+    # remove the username from the session if it is there
+    session.pop('username', None)
+    session.clear()
+    return render_template('landing.html', message='bye')
 
     #db.execute('CREATE TABLE users (username VARCHAR PRIMARY KEY, password VARCHAR NOT NULL)')
