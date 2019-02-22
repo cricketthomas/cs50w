@@ -83,3 +83,11 @@ def logout():
     return render_template('landing.html', message='bye')
 
     #db.execute('CREATE TABLE users (username VARCHAR PRIMARY KEY, password VARCHAR NOT NULL)')
+#Search for books:
+@app.route("/search", methods=["POST", "GET"])
+def searchPage():
+    return render_template("search.html")
+
+@app.route("/results", methods=["POST","GET"])
+def results():
+    return 'results'
