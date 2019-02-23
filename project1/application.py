@@ -93,7 +93,8 @@ def searchPage():
 
 @app.route("/results", methods=["POST", "GET"])
 def results():
-    textparams = request.form.get("search").replace("'", "")
+    textparams = request.form.get("search").replace(
+        "'", "").strip().capitalize()
     params = request.form.get("params")
     if params == 'isbn':
         sql = """
@@ -112,6 +113,8 @@ def results():
         SELECT * FROM books WHERE year LIKE :textparams
         """
 
+    if db.execute(sql, {'textparams': '%'+textparams+'%'}).rowcount == 0:
+        return render_template('landing.html', message="No results found.")
     searchResults = db.execute(
         sql, {'textparams': '%'+textparams+'%'}).fetchall()
     return render_template('landing.html', message=searchResults)
