@@ -62,7 +62,7 @@ def loggedin():
     if request.method == 'POST':
         username = request.form.get("username").replace("'", "")
         password = request.form.get("password")
-        sql = ("SELECT * FROM users WHERE username = :username AND password = :password")
+        sql = "SELECT * FROM users WHERE username = :username AND password = :password"
         users = db.execute(
             sql, {'username': username, "password": password}).fetchall()
         if users:
@@ -83,11 +83,35 @@ def logout():
     return render_template('landing.html', message='bye')
 
     #db.execute('CREATE TABLE users (username VARCHAR PRIMARY KEY, password VARCHAR NOT NULL)')
-#Search for books:
+# Search for books:
+
+
 @app.route("/search", methods=["POST", "GET"])
 def searchPage():
     return render_template("search.html")
 
-@app.route("/results", methods=["POST","GET"])
+
+@app.route("/results", methods=["POST", "GET"])
 def results():
-    return 'results'
+    textparams = request.form.get("search").replace("'", "")
+    params = request.form.get("params")
+    if params == 'isbn':
+        sql = """
+        SELECT * FROM books WHERE isbn LIKE :textparams
+        """
+    elif params == "title":
+        sql = """
+        SELECT * FROM books WHERE title LIKE :textparams
+        """
+    elif params == "author":
+        sql = """
+        SELECT * FROM books WHERE author LIKE :textparams
+        """
+    else:
+        sql = """
+        SELECT * FROM books WHERE year LIKE :textparams
+        """
+
+    searchResults = db.execute(
+        sql, {'textparams': '%'+textparams+'%'}).fetchall()
+    return render_template('landing.html', message=searchResults)

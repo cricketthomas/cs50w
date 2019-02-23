@@ -6,9 +6,18 @@
 <h2>Search</h2>
 <form action="{{ url_for('results') }}" method="post">
     <div class="form-group">
-
-        <input class="input-lg" type="text" name="search" placeholder="Search books by ISBN, Title, Author, and Year">
+        <label for="select">Select Search Type
+            <select class="custom-select" name="params">
+                <option selected>Open this select menu</option>
+                <option value="isbn" name="params">ISBN</option>
+                <option value="title" name="params">Title</option>
+                <option value="author" name="params">Author</option>
+                <option value="year" name="params">Year</option>
+            </select>
+        </label>
+        <input class="input-lg" type="text" name="search" placeholder="Search Text">
     </div>
+
     <button class="btn btn-primary">Submit</button>
 
 </form>
