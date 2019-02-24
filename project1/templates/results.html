@@ -1,1 +1,13 @@
-{% entends 'layout.html' %}
+{% extends "layout.html" %}
+
+{% block title %}
+Results
+{% endblock %}
+{% block body %}
+<h2>{{bookslen}} Results for {{params}}: {{textparams}}</h2>
+<ol>
+    {% for book in books %}
+    <li>{{book.title}}, {{book.year}}, by: {{book.author}}. ISBN: {{book.isbn}}</li>
+    {% endfor %}
+</ol>
+{% endblock %}

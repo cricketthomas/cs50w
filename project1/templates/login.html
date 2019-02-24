@@ -15,12 +15,22 @@ Login
 {% else %}
 <form action="{{ url_for('loggedin') }}" method="POST">
     <div class="form-group">
-        <input class="input" name="username" placeholder="username">
-        <input class="input" name="password" type="password" placeholder="password">
+        <input class="input" name="username" placeholder="username" required>
+        <input class="input" name="password" type="password" placeholder="password" required>
     </div>
     <div class="form-group">
         <button class="btn btn-primary">Login</button>
     </div>
 </form>
 {% endif %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="alert alert-danger" role="alert">
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
 {% endblock %}

@@ -1,6 +1,6 @@
 import os
 import psycopg2
-from flask import Flask, session, render_template, request
+from flask import Flask, session, render_template, request, flash
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -60,7 +60,7 @@ def login():
 @app.route("/loggedin", methods=["POST", "GET"])
 def loggedin():
     if request.method == 'POST':
-        username = request.form.get("username").replace("'", "")
+        username = request.form.get("username").replace("'", "").strip()
         password = request.form.get("password")
         sql = "SELECT * FROM users WHERE username = :username AND password = :password"
         users = db.execute(
@@ -71,8 +71,8 @@ def loggedin():
             message = "Hi, " + username + '!'
             return render_template("landing.html", message=message)
         else:
-            message = 'Error, username or password incorrect or does not exist.'
-            return render_template("error.html", message=message)
+            flash('Error, username or password incorrect or does not exist.')
+            return render_template("login.html")
 
 
 @app.route('/logout')
@@ -114,7 +114,8 @@ def results():
         """
 
     if db.execute(sql, {'textparams': '%'+textparams+'%'}).rowcount == 0:
-        return render_template('landing.html', message="No results found.")
-    searchResults = db.execute(
+        return render_template('landing.html', books="No results found.")
+    books = db.execute(
         sql, {'textparams': '%'+textparams+'%'}).fetchall()
-    return render_template('landing.html', message=searchResults)
+
+    return render_template('results.html', books=books, textparams=textparams, params=params, bookslen=len(books))
