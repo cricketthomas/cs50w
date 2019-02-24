@@ -7,7 +7,10 @@ Results
 <h2>{{bookslen}} Results for {{params}}: {{textparams}}</h2>
 <ol>
     {% for book in books %}
-    <li>{{book.title}}, {{book.year}}, by: {{book.author}}. ISBN: {{book.isbn}}</li>
+
+    <a href="{{ url_for('book', book_id=book.isbn) }}">
+        <li>{{book.title}}, {{book.year}}, by: {{book.author}}. ISBN: {{book.isbn}}</li>
+    </a>
     {% endfor %}
 </ol>
 {% endblock %}

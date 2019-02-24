@@ -29,8 +29,9 @@ def index():
         currentUser = session.get('username')
         return render_template("landing.html", currentUser=currentUser)
 
-
 # creating an account
+
+
 @app.route("/register", methods=["POST", "GET"])
 def register():
     return render_template("register.html")
@@ -82,7 +83,7 @@ def logout():
     session.clear()
     return render_template('landing.html', message='bye')
 
-    #db.execute('CREATE TABLE users (username VARCHAR PRIMARY KEY, password VARCHAR NOT NULL)')
+    # db.execute('CREATE TABLE users (username VARCHAR PRIMARY KEY, password VARCHAR NOT NULL)')
 # Search for books:
 
 
@@ -119,3 +120,10 @@ def results():
         sql, {'textparams': '%'+textparams+'%'}).fetchall()
 
     return render_template('results.html', books=books, textparams=textparams, params=params, bookslen=len(books))
+
+@app.route("/results/<string:book_id>")
+def book(book_id):
+    book = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": book_id}).fetchone()
+    #if book is None:  return render_template("error.html", message="No such book.")
+    return render_template("book.html",book=book)
+
