@@ -5,9 +5,31 @@
 {% endblock %}
 {% block body %}
 
-<p>Title: {{book.title}}</p>
-<p>Author: {{book.author}}</p>
-<p>Publish Year: {{book.year}}</p>
-<p>ISBN Number: {{book.isbn}}</p>
+<p>
+    Title: {{book.title}} <br>
+    Author: {{book.author}} <br>
+    Publish Year: {{book.year}} <br>
+    ISBN Number: {{book.isbn}}
+</p>
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="alert alert-success" role="alert">
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+{% if session['reviewed']%}
+<h5>Thank you for your review. You can only submit one per user.</h5>
+{%else%}
+<h2>Submit a Review</h2>
+<form action="{{ url_for('review',book_id=book.isbn) }}" method="post" class="form">
+    <textarea class="form-control required"></textarea>
+    <button class="btn btn-primary">Submit Reivew</button>
+</form>
+{%endif%}
 
 {% endblock %}

@@ -1,6 +1,6 @@
 import os
 import psycopg2
-from flask import Flask, session, render_template, request, flash
+from flask import Flask, session, render_template, request, flash, redirect
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -121,9 +121,19 @@ def results():
 
     return render_template('results.html', books=books, textparams=textparams, params=params, bookslen=len(books))
 
+
 @app.route("/results/<string:book_id>")
 def book(book_id):
-    book = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": book_id}).fetchone()
-    #if book is None:  return render_template("error.html", message="No such book.")
-    return render_template("book.html",book=book)
+    book = db.execute("SELECT * FROM books WHERE isbn = :isbn",
+                      {"isbn": book_id}).fetchone()
+    # if book is None:  return render_template("error.html", message="No such book.")
+    return render_template("book.html", book=book)
 
+
+@app.route("/results/<string:book_id>/reviewed", methods=["POST", "GET"])
+def review(book_id):
+    book = db.execute("SELECT * FROM books WHERE isbn = :isbn",
+                      {"isbn": book_id}).fetchone()
+    flash("Review Submitted Sucessfully.")
+    session['reviewed'] = True
+    return render_template("book.html", book=book)
