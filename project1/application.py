@@ -115,10 +115,9 @@ def results():
         """
 
     if db.execute(sql, {'textparams': '%'+textparams+'%'}).rowcount == 0:
-        return render_template('landing.html', books="No results found.")
+        return render_template('error.html', books="No results found.")
     books = db.execute(
         sql, {'textparams': '%'+textparams+'%'}).fetchall()
-
     return render_template('results.html', books=books, textparams=textparams, params=params, bookslen=len(books))
 
 
