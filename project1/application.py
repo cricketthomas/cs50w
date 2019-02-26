@@ -135,5 +135,5 @@ def review(book_id):
     book = db.execute("SELECT * FROM books WHERE isbn = :isbn",
                       {"isbn": book_id}).fetchone()
     flash("Review Submitted Sucessfully.")
-    session['reviewed'] = True
+    session[book.isbn] = True
     return render_template("book.html", book=book)

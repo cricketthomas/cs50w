@@ -21,8 +21,8 @@
 </div>
 {% endif %}
 {% endwith %}
-
-{% if session['reviewed']%}
+<!-- -->
+{% if session[book.isbn]%}
 <h5>Thank you for your review. You can only submit one per user.</h5>
 {%else%}
 <h2>Submit a Review</h2>
