@@ -42,10 +42,10 @@ def registered():
     session['username'] = request.form.get("username")
     username = session['username']
     password = request.form.get("password")
-    #password_hash = generate_password_hash(password)
+    password_hash = generate_password_hash(password)
     try:
         db.execute("INSERT INTO users (username, password) VALUES (:username, :password)",
-                   {"username": username, "password": password})
+                   {"username": username, "password": password_hash})
         db.commit()
         session['logged_in'] = True
 
@@ -60,7 +60,7 @@ def registered():
 def login():
     return render_template("login.html")
 
-
+'''
 @app.route("/loggedin", methods=["POST", "GET"])
 def loggedin():
     if request.method == 'POST':
@@ -88,9 +88,9 @@ def loggedin():
         sql = "SELECT * FROM users WHERE username = :username"
         users = db.execute(
             sql, {'username': username}).fetchone()
-        
-        if check_password_hash(users[1] for user in users, password):
-        #if users:
+        x = [x for x in users]
+        hash_resolved = check_password_hash(x[1],password)
+        if users and hash_resolved:
             session['logged_in'] = True
             session['username'] = username
             message = "Hi, " + username + '!'
@@ -99,8 +99,7 @@ def loggedin():
             flash('Error, username or password incorrect or does not exist.')
             return render_template("login.html")
         
-        
- '''     
+  
         
 
 @app.route('/logout')
@@ -117,7 +116,7 @@ def logout():
 def searchPage():
     return render_template("search.html")
 
-
+'''
 @app.route("/results", methods=["POST"])
 def results():
     textparams = request.form.get("search").replace(
@@ -152,18 +151,17 @@ def results():
 '''
 @app.route("/results", methods=["POST"])
 def results():
-      textparams = request.form.get("search").replace("'", "").strip().capitalize()
-      params = request.form.get("params")
-      if params == '':
-            sql = """SELECT * FROM books WHERE isbn LIKE '%"""+ textparams +"""%' OR title  LIKE '%"""+ textparams +"""%'
+    textparams = request.form.get("search").replace("'", "").strip().capitalize()
+    params = request.form.get("params")
+    if params == '':
+        sql = """SELECT * FROM books WHERE isbn LIKE '%"""+ textparams +"""%' OR title  LIKE '%"""+ textparams +"""%'
         OR author LIKE '%"""+ textparams +"""%' OR year  LIKE '%""" + textparams +"""%'"""
-            books = db.execute(sql).fetchall()
-      else:
-            sql = """ SELECT * FROM books WHERE""" + params + """ LIKE :textparams """
-            books = db.execute(sql, {'textparams': '%'+textparams+'%'}).fetchall()
-      
-        return render_template('results.html', books=books, textparams=textparams, params=params, bookslen=len(books))
-'''
+        books = db.execute(sql).fetchall()
+    else:
+        sql = """ SELECT * FROM books WHERE """ + params + """ LIKE :textparams """
+        books = db.execute(sql, {'textparams': '%'+textparams+'%'}).fetchall()
+    return render_template('results.html', books=books, textparams=textparams, params=params, bookslen=len(books))
+
 
 
 
