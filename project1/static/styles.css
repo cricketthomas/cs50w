@@ -3,4 +3,12 @@
   justify-content: center;
 }
 
+.review_score {
+  display: inline-block;
+}
+
+.reviewCards {
+  margin: 2em;
+}
+
 /*# sourceMappingURL=styles.css.map */

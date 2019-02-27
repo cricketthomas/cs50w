@@ -115,7 +115,9 @@ def results():
         """
 
     if db.execute(sql, {'textparams': '%'+textparams+'%'}).rowcount == 0:
-        return render_template('error.html', books="No results found.")
+        flash("No results found.")
+        return render_template('search.html')
+
     books = db.execute(
         sql, {'textparams': '%'+textparams+'%'}).fetchall()
     return render_template('results.html', books=books, textparams=textparams, params=params, bookslen=len(books))
@@ -125,14 +127,29 @@ def results():
 def book(book_id):
     book = db.execute("SELECT * FROM books WHERE isbn = :isbn",
                       {"isbn": book_id}).fetchone()
-    # if book is None:  return render_template("error.html", message="No such book.")
-    return render_template("book.html", book=book)
+    all_reviews = db.execute(
+        "SELECT * FROM reviews WHERE book = :book", {"book": book.isbn}).fetchall()
+
+
+# if book is None:  return render_template("error.html", message="No such book.")
+    return render_template("book.html", book=book, all_reviews=all_reviews)
 
 
 @app.route("/results/<string:book_id>/reviewed", methods=["POST", "GET"])
 def review(book_id):
+    review = request.form.get("review")
+    review_score = request.form.get("review_score")
+    request.form.get("username")
     book = db.execute("SELECT * FROM books WHERE isbn = :isbn",
                       {"isbn": book_id}).fetchone()
-    flash("Review Submitted Sucessfully.")
-    session[book.isbn] = True
-    return render_template("book.html", book=book)
+    all_reviews = db.execute(
+        "SELECT * FROM reviews WHERE book = :book", {"book": book.isbn}).fetchall()
+    try:
+        review = db.execute("INSERT INTO reviews (reviewer_id, book, review, review_score, date) VALUES (:reviewer_id, :book, :review, :review_score, :date)", {
+                            "reviewer_id": session['username'], "book": book.isbn, "review": review, "review_score": review_score, "date": "now()"})
+        db.commit()
+        flash("Review Submitted Sucessfully.")
+        return render_template("book.html", book=book, all_reviews=all_reviews)
+    except:
+        flash("Review Submission Failed. Only one review per user allowed.")
+        return render_template("book.html", book=book, all_reviews=all_reviews)

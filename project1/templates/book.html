@@ -14,22 +14,60 @@
 
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-<div class="alert alert-success" role="alert">
+<div class="alert alert-primary" role="alert">
     {% for message in messages %}
     {{ message }}
     {% endfor %}
 </div>
 {% endif %}
 {% endwith %}
-<!-- -->
-{% if session[book.isbn]%}
+
+
+
+{% if not all_reviews.reviewer_id == session['username'] %}
 <h5>Thank you for your review. You can only submit one per user.</h5>
-{%else%}
+{% else %}
 <h2>Submit a Review</h2>
 <form action="{{ url_for('review',book_id=book.isbn) }}" method="post" class="form">
-    <textarea class="form-control required"></textarea>
+    <textarea class="form-control required" name="review"></textarea>
+    <label for="review_score">Rate the Book:
+        <div>
+            <label>1</label> <input type="radio" class="review_score" value="1" name="review_score" required>
+            <label>2</label> <input type="radio" class="review_score" value="2" name="review_score" required>
+            <label>3</label> <input type="radio" class="review_score" value="3" name="review_score" required>
+            <label>4</label> <input type="radio" class="review_score" value="4" name="review_score" required>
+            <label>5</label> <input type="radio" class="review_score" value="5" name="review_score" required>
+        </div>
+    </label>
     <button class="btn btn-primary">Submit Reivew</button>
 </form>
 {%endif%}
 
-{% endblock %}
+
+
+
+
+<h1>Reviews</h1>
+
+<div class="card reviewCards" style="width: 18rem;">
+
+    <div class="card-body">
+        {% for reviews in all_reviews %}
+        <h5 class="card-title">{{reviews.reviewer_id}} says:</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{reviews.date}}</h6>
+        <p class="card-text"> {{reviews.review}} <br>
+            Score: {{reviews.review_score}}/5 </p>
+        <hr>
+        {% endfor %}
+    </div>
+
+
+
+
+
+    {% endblock %}
+
+
+    <!--
+        
+    -->
