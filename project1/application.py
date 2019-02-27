@@ -1,9 +1,11 @@
 import os
 import psycopg2
+import hashlib
 from flask import Flask, session, render_template, request, flash, redirect
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
@@ -42,11 +44,14 @@ def registered():
     session['username'] = request.form.get("username")
     username = session['username']
     password = request.form.get("password")
+    #password_hash = generate_password_hash(password)
     try:
         db.execute("INSERT INTO users (username, password) VALUES (:username, :password)",
                    {"username": username, "password": password})
         db.commit()
-        return ("User account: " + username + " created.")
+        session['logged_in'] = True
+
+        return render_template("landing.html", message=username+ "account created")
     except:
         return render_template("error.html", message="Error: username in use.")
 
@@ -92,7 +97,7 @@ def searchPage():
     return render_template("search.html")
 
 
-@app.route("/results", methods=["POST", "GET"])
+@app.route("/results", methods=["POST"])
 def results():
     textparams = request.form.get("search").replace(
         "'", "").strip().capitalize()
@@ -129,10 +134,11 @@ def book(book_id):
                       {"isbn": book_id}).fetchone()
     all_reviews = db.execute(
         "SELECT * FROM reviews WHERE book = :book", {"book": book.isbn}).fetchall()
-
+    current_review = db.execute(
+        "SELECT * FROM reviews WHERE book = :book AND reviewer_id = :reviewer_id", {"book": book.isbn, "reviewer_id": session['username']}).fetchone()
 
 # if book is None:  return render_template("error.html", message="No such book.")
-    return render_template("book.html", book=book, all_reviews=all_reviews)
+    return render_template("book.html", book=book, all_reviews=all_reviews, current_review=current_review)
 
 
 @app.route("/results/<string:book_id>/reviewed", methods=["POST", "GET"])
@@ -144,12 +150,19 @@ def review(book_id):
                       {"isbn": book_id}).fetchone()
     all_reviews = db.execute(
         "SELECT * FROM reviews WHERE book = :book", {"book": book.isbn}).fetchall()
+
+    current_review = db.execute("SELECT * FROM reviews WHERE book = :book AND reviewer_id = :reviewer_id", {
+                                "book": book.isbn, "reviewer_id": session['username']}).fetchone()
     try:
         review = db.execute("INSERT INTO reviews (reviewer_id, book, review, review_score, date) VALUES (:reviewer_id, :book, :review, :review_score, :date)", {
                             "reviewer_id": session['username'], "book": book.isbn, "review": review, "review_score": review_score, "date": "now()"})
         db.commit()
+        current_review = db.execute("SELECT * FROM reviews WHERE book = :book AND reviewer_id = :reviewer_id",
+                                    {"book": book.isbn, "reviewer_id": session['username']}).fetchone()
+        all_reviews = db.execute(
+            "SELECT * FROM reviews WHERE book = :book", {"book": book.isbn}).fetchall()
         flash("Review Submitted Sucessfully.")
-        return render_template("book.html", book=book, all_reviews=all_reviews)
+        return render_template("book.html", book=book, all_reviews=all_reviews, current_review=current_review)
     except:
         flash("Review Submission Failed. Only one review per user allowed.")
-        return render_template("book.html", book=book, all_reviews=all_reviews)
+        return render_template("book.html", book=book, all_reviews=all_reviews, current_review=current_review)
