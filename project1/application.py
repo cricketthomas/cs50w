@@ -32,8 +32,6 @@ def index():
         return render_template("landing.html", currentUser=currentUser)
 
 # creating an account
-
-
 @app.route("/register", methods=["POST", "GET"])
 def register():
     return render_template("register.html")
@@ -80,6 +78,30 @@ def loggedin():
             flash('Error, username or password incorrect or does not exist.')
             return render_template("login.html")
 
+'''      
+# Test login with password hashing
+@app.route("/loggedin", methods=["POST", "GET"])
+def loggedin():
+    if request.method == 'POST':
+        username = request.form.get("username").replace("'", "").strip()
+        password = request.form.get("password")
+        sql = "SELECT * FROM users WHERE username = :username"
+        users = db.execute(
+            sql, {'username': username}).fetchone()
+        
+        if check_password_hash(users[1] for user in users, password):
+        #if users:
+            session['logged_in'] = True
+            session['username'] = username
+            message = "Hi, " + username + '!'
+            return render_template("landing.html", message=message)
+        else:
+            flash('Error, username or password incorrect or does not exist.')
+            return render_template("login.html")
+        
+        
+ '''     
+        
 
 @app.route('/logout')
 def logout():
@@ -87,11 +109,10 @@ def logout():
     session.pop('username', None)
     session.clear()
     return render_template('landing.html', message='bye')
-
     # db.execute('CREATE TABLE users (username VARCHAR PRIMARY KEY, password VARCHAR NOT NULL)')
+
+    
 # Search for books:
-
-
 @app.route("/search", methods=["POST", "GET"])
 def searchPage():
     return render_template("search.html")
@@ -127,6 +148,26 @@ def results():
         sql, {'textparams': '%'+textparams+'%'}).fetchall()
     return render_template('results.html', books=books, textparams=textparams, params=params, bookslen=len(books))
 
+#Test Results function
+'''
+@app.route("/results", methods=["POST"])
+def results():
+      textparams = request.form.get("search").replace("'", "").strip().capitalize()
+      params = request.form.get("params")
+      if params == '':
+            sql = """SELECT * FROM books WHERE isbn LIKE '%"""+ textparams +"""%' OR title  LIKE '%"""+ textparams +"""%'
+        OR author LIKE '%"""+ textparams +"""%' OR year  LIKE '%""" + textparams +"""%'"""
+            books = db.execute(sql).fetchall()
+      else:
+            sql = """ SELECT * FROM books WHERE""" + params + """ LIKE :textparams """
+            books = db.execute(sql, {'textparams': '%'+textparams+'%'}).fetchall()
+      
+        return render_template('results.html', books=books, textparams=textparams, params=params, bookslen=len(books))
+'''
+
+
+
+
 
 @app.route("/results/<string:book_id>")
 def book(book_id):
@@ -145,7 +186,7 @@ def book(book_id):
 def review(book_id):
     review = request.form.get("review")
     review_score = request.form.get("review_score")
-    request.form.get("username")
+    # request.form.get("username")
     book = db.execute("SELECT * FROM books WHERE isbn = :isbn",
                       {"isbn": book_id}).fetchone()
     all_reviews = db.execute(
