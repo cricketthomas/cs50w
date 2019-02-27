@@ -48,9 +48,16 @@
 
 
 <h1>Reviews</h1>
-{% if not all_reviews%}<hr>
+<hr>
+<h5>Good Reads Data</h5>
+<p>Average Rating: {{good_reads[0]['average_rating']}}</p>
+<p>Total Reviews:  {{good_reads[0]['work_ratings_count']}}</p>
+
+
+{% if not all_reviews%}
+<hr>
 <h4>No reviews yet.</h4>
-{%else%}
+{% else %}
 <div class="card reviewCards" style="width: 18rem;">
 
     <div class="card-body">

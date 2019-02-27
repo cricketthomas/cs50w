@@ -6,10 +6,15 @@ Register
 
 {% block heading %}
 <h1 class="block-heading">Create an Account</h1>
-
 {% endblock %}
 
-{% block body %}
+{%block body%}
+{% if session['logged_in'] %}
+<h3>Your already logged in</h3>
+{% else %}
+
+
+
 
 <form action="{{ url_for('registered') }}" method="post">
 
@@ -22,4 +27,6 @@ Register
     </div>
 
 </form>
+{% endif%}
+
 {% endblock %}
