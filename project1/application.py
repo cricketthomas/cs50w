@@ -2,7 +2,7 @@ import os
 import psycopg2
 import requests
 import json
-from flask import Flask, session, render_template, request, flash, redirect
+from flask import Flask, session, render_template, request, flash, redirect, jsonify
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -19,11 +19,14 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+
 # Set up database
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
 # API Requests
+# Stop JSON Sorting
+#app.config["JSON_SORT_KEYS"] = False
 
 
 def avg_rating(isbn):
@@ -32,7 +35,7 @@ def avg_rating(isbn):
     data = res.json()
     return data['books']
 
-
+# Default Route
 @app.route("/")
 def index():
     if not session.get('logged_in'):
@@ -58,8 +61,9 @@ def registered():
                    {"username": username, "password": password_hash})
         db.commit()
         session['logged_in'] = True
-
-        return render_template("landing.html", message=username + "account created")
+        message = "An account for username: '" + username.capitalize() + "' has been created."
+        flash(message)
+        return render_template("landing.html")
     except:
         return render_template("404.html", message="Error: username in use.")
 
@@ -70,7 +74,7 @@ def registered():
 def login():
     return render_template("login.html")
 
-# Test login with password hashing
+# login with password hashing
 @app.route("/loggedin", methods=["POST", "GET"])
 def loggedin():
     if request.method == 'POST':
@@ -93,7 +97,7 @@ def loggedin():
             flash('Error, username or password incorrect or does not exist.')
             return render_template("login.html")
 
-
+# logging out
 @app.route('/logout')
 def logout():
     # remove the username from the session if it is there
@@ -109,7 +113,7 @@ def searchPage():
         return render_template('login.html')
     return render_template("search.html")
 
-
+# display results
 @app.route("/results", methods=["POST"])
 def results():
     if not session.get('logged_in'):
@@ -129,7 +133,7 @@ def results():
         return render_template('search.html')
     return render_template('results.html', books=books, textparams=textparams, params=params, bookslen=len(books))
 
-
+# specific book routing
 @app.route("/results/<string:book_id>")
 def book(book_id):
     if not session.get('logged_in'):
@@ -143,10 +147,9 @@ def book(book_id):
     current_review = db.execute(
         "SELECT * FROM reviews WHERE book = :book AND reviewer_id = :reviewer_id", {"book": book.isbn, "reviewer_id": session['username']}).fetchone()
     good_reads = avg_rating(book.isbn)
-
     return render_template("book.html", book=book, all_reviews=all_reviews, current_review=current_review, good_reads=good_reads)
 
-
+# routing for a review
 @app.route("/results/<string:book_id>/reviewed", methods=["POST", "GET"])
 def review(book_id):
     if not session.get('logged_in'):
@@ -161,6 +164,7 @@ def review(book_id):
 
     current_review = db.execute("SELECT * FROM reviews WHERE book = :book AND reviewer_id = :reviewer_id", {
                                 "book": book.isbn, "reviewer_id": session['username']}).fetchone()
+    # reruning queries to update the data.
     try:
         review = db.execute("INSERT INTO reviews (reviewer_id, book, review, review_score, date) VALUES (:reviewer_id, :book, :review, :review_score, :date)", {
                             "reviewer_id": session['username'], "book": book.isbn, "review": review, "review_score": review_score, "date": "now()"})
@@ -175,10 +179,30 @@ def review(book_id):
         flash("Review Submission Failed. Only one review per user allowed.")
         return render_template("book.html", book=book, all_reviews=all_reviews, current_review=current_review, good_reads=good_reads)
 
-@app.route("/api/<string:isbn>")
+# here is the API for my book data.
+@app.route("/api/<string:isbn>", methods=["GET"])
 def api(isbn):
-    return "api access"
+    try:
+        book = db.execute("SELECT * FROM books WHERE isbn = :isbn",
+                          {"isbn": isbn}).fetchone()
+        good_reads = avg_rating(isbn)
 
+        book_json = {
+            "title": book.title,
+            "author": book.author,
+            "year": int(book.year),
+            "isbn": book.isbn,
+            "review_count": int(good_reads[0]['work_ratings_count']),
+            "average_score": float(good_reads[0]['average_rating'])
+        }
+        return jsonify(book_json)
+
+    except:
+        message = f"We could not locate a book with the ISBN '{isbn}'."
+    return render_template('404.html', message=message), 404
+
+
+# App page error handling.
 @app.errorhandler(404)
 def notFound(e):
     message = e
@@ -201,4 +225,3 @@ def serverError(e):
 def badRequest(e):
     message = e
     return render_template('404.html', message=message), 400
-

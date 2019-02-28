@@ -7,6 +7,27 @@
     display: inline-block;
 }
 
-.reviewCards{
+.reviewCards {
     margin: 2em;
+}
+
+.centering {
+    display: flex;
+    justify-content: center;
+}
+
+.login_register {
+    max-width: 30vw;
+    margin: auto;
+}
+
+@media(max-width: 600px) {
+    .login_register {
+        max-width: 80vw;
+    }
+}
+
+.books_card {
+    margin: 2em;
+  
 }

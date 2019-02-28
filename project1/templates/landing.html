@@ -1,10 +1,30 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Welcome to Book Reader
+Welcome to Book Reader
 {% endblock %}
 
 {% block body %}
-<h1>Book Review application</h1>
-<h1>{{message}}</h1>
+<h1 class="block-heading centering">Book Review Application</h1>
+<br>
+<p class="centering">Please use this application to search, rate and review books. You must have an account to do so.
+    <br>
+    We also have an API for you to retrieve information from our website.
+</p>
+
+
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="alert alert-danger alert-success fade show" role="alert">
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endif %}
+{% endwith %}
+
 {% endblock %}

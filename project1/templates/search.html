@@ -3,34 +3,35 @@
 {% block body %}
 {% if session['logged_in'] %}
 
-<h2>Search</h2>
-
+<h2 class="block-heading">Search</h2>
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-<div class="alert alert-warning" role="alert">
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
     {% for message in messages %}
     {{ message }}
     {% endfor %}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
 </div>
+
 {% endif %}
 {% endwith %}
 
-<form action="{{ url_for('results') }}" method="post">
+<form action="{{ url_for('results') }}" method="post" class="login_register">
     <div class="form-group">
-        <label for="select">Select Search Type
-            <select class="custom-select" name="params">
-                <option value="">Specify Criteria from the list</option>
+        <input class="form-control login_register centering" type="text" name="search" placeholder="Enter Search Criteria">
+        <label for="select">
+            <select class="custom-select" name="params" class="login_register centering">
+                <option value="">(Optional) Specify criteria from the list</option>
                 <option value="isbn" name="params">ISBN</option>
                 <option value="title" name="params">Title</option>
                 <option value="author" name="params">Author</option>
                 <option value="year" name="params">Year</option>
             </select>
         </label>
-        <input class="input" type="text" name="search" placeholder="Enter Search Criteria">
     </div>
-
     <button class="btn btn-primary">Submit</button>
-
 </form>
 
 {% else %}

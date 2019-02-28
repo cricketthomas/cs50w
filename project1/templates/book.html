@@ -3,21 +3,34 @@
 {% block title %}
 {{book.title}}
 {% endblock %}
+
 {% block body %}
 
-<p>
-    Title: {{book.title}} <br>
-    Author: {{book.author}} <br>
-    Publish Year: {{book.year}} <br>
-    ISBN Number: {{book.isbn}}
-</p>
+
+
+<div class="card  text-center books_card">
+    <div class="card-body">
+
+        <h5 class="card-title">{{book.title}}</h5>
+        <h6 class="card-subtitle mb-2 text-muted"> Author: {{book.author}}</h6>
+        <p class="card-text">
+            Publish Year: {{book.year}} <br>
+            ISBN Number: {{book.isbn}}
+        </p>
+    </div>
+</div>
+
 
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-<div class="alert alert-primary" role="alert">
+
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
     {% for message in messages %}
     {{ message }}
     {% endfor %}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
 </div>
 {% endif %}
 {% endwith %}
@@ -25,7 +38,7 @@
 
 
 {% if current_review %}
-<h5>Thank you for your review. You can only submit one per user.</h5>
+<h5>Only one review per user is allowed.</h5>
 {% else %}
 <h2>Submit a Review</h2>
 <form action="{{ url_for('review',book_id=book.isbn) }}" method="post" class="form">
@@ -43,40 +56,28 @@
 </form>
 {%endif%}
 
-
-
-
-
-<h1>Reviews</h1>
+<h1 class="block-heading">Reviews</h1>
 <hr>
-<h5>Good Reads Data</h5>
-<p>Average Rating: {{good_reads[0]['average_rating']}}</p>
-<p>Total Reviews:  {{good_reads[0]['work_ratings_count']}}</p>
+<h5>Good Reads Data:</h5>
+<p> <strong>Average Rating:</strong> {{good_reads[0]['average_rating']}} <br>
+    <strong>Total Reviews:</strong> {{good_reads[0]['work_ratings_count']}}</p>
 
 
 {% if not all_reviews%}
 <hr>
 <h4>No reviews yet.</h4>
-{% else %}
-<div class="card reviewCards" style="width: 18rem;">
 
-    <div class="card-body">
-        {% for reviews in all_reviews %}
-        <h5 class="card-title">{{reviews.reviewer_id}} says:</h5>
-        <h6 class="card-subtitle mb-2 text-muted">{{reviews.date}}</h6>
-        <p class="card-text"> {{reviews.review}} <br>
-            Score: {{reviews.review_score}}/5 </p>
+{% else %}
+<div class="media">
+    {% for reviews in all_reviews %}
+    <div class="media-body">
+        <h5 class="mt-0 mb-1">{{reviews.reviewer_id}} says:</h5>
+        {{reviews.review}} <br>
+        <strong> Rating:</strong> {{reviews.review_score}}/5 </p>
         <hr>
         {% endfor %}
     </div>
+</div>
 
-    {%endif%}
-
-
-
-    {% endblock %}
-
-
-    <!--
-        
-    -->
+{%endif%}
+{% endblock %}

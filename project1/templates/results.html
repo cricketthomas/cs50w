@@ -4,14 +4,30 @@
 Results
 {% endblock %}
 {% block body %}
-<h2>{{bookslen}} Results for {{params}}: {{textparams}}</h2>
-<ol>
-    {% for book in books %}
+<h2 class="block-heading">{{bookslen}}
+    {%if params == ""%}
+    Results for: {{textparams}}
+    {%else%}
+    Results for {{params}}: {{textparams}}
+    {%endif%}
 
+</h2>
+
+<ul class="list-group centering">
+    {% for book in books %}
     <a href="{{ url_for('book', book_id=book.isbn) }}">
-        <li>{{book.title}}, {{book.year}}, by: {{book.author}}. ISBN: {{book.isbn}}</li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{book.title}}, {{book.year}}, by: {{book.author}}
+            {%if params == "isbn"%}
+            ISBN: {{book.isbn}}
+            {%endif%}
+            <br>
+            <span class="badge badge-primary badge-pill">{{book.year}}</span>
+        </li>
     </a>
     {% endfor %}
-</ol>
+</ul>
+
+
 
 {% endblock %}
