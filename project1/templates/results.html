@@ -17,7 +17,7 @@ Results
     {% for book in books %}
     <a href="{{ url_for('book', book_id=book.isbn) }}">
         <li class="list-group-item d-flex justify-content-between align-items-center">
-            {{book.title}}, {{book.year}}, by: {{book.author}}
+            {{book.title}}, by: {{book.author}}
             {%if params == "isbn"%}
             ISBN: {{book.isbn}}
             {%endif%}
