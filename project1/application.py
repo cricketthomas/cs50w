@@ -61,7 +61,8 @@ def registered():
                    {"username": username, "password": password_hash})
         db.commit()
         session['logged_in'] = True
-        message = "An account for username: '" + username.capitalize() + "' has been created."
+        message = "An account for username: '" + \
+            username.capitalize() + "' has been created."
         flash(message)
         return render_template("landing.html")
     except:
@@ -198,8 +199,9 @@ def api(isbn):
         return jsonify(book_json)
 
     except:
-        message = f"We could not locate a book with the ISBN '{isbn}'."
-    return render_template('404.html', message=message), 404
+        #message = f"We could not locate a book with the ISBN '{isbn}'."
+    # return render_template('404.html', message=message), 404
+        return jsonify({"error": "ISBN of " + isbn + " was not found"}), 404
 
 
 # App page error handling.
