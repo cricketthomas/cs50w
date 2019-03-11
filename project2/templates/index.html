@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Index
+{% endblock %}
+
+
+{%block body%}
+
+
+<h1>Flack App</h1>
+{% if session['logged_in'] %}
+<h2>
+    Hi {{session["username"]}}
+</h2>
+{%else%}
+Sign In
+<fieldset>
+    <form action="{{ url_for('registered') }}" method="post" id="registered_form">
+        <input class="form-control" name="username" placeholder="username" id="username">
+        <input type="submit" class="btn btn-primary">
+    </form>
+</fieldset>
+{% endif %}
+
+<br>
+<hr>
+<div id="result"></div>
+
+{% endblock %}
