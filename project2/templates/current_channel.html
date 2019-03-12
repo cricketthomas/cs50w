@@ -1,0 +1,21 @@
+{%extends 'layout.html'%}
+{%block title%}
+{{channel_name}} Channel
+{%endblock%}
+
+{%block body%}
+<h1>
+    This channel is: {{channel_name}}
+</h1>
+<hr>
+
+<div>Yes Votes: <span id="yes"></span></div>
+<div>No Votes: <span id="no"></span></div>
+<div>Maybe Votes: <span id="maybe"><span></div>
+<hr>
+<button data-vote="yes">Yes</button>
+<button data-vote="no">No</button>
+<button data-vote="maybe">Maybe</button>
+
+
+{%endblock%}

@@ -17,8 +17,6 @@
 
       }
 
-
-
       // Connect to websocket
       var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
@@ -30,31 +28,22 @@
               button.onclick = () => {
                   const selection = button.dataset.vote;
                   socket.emit('submit vote', {
-                      'selection': selection,
+                      'selection': selection
                   });
               };
           });
       });
 
       // When a new vote is announced, add to the unordered list
-      socket.on('announce vote', data => {
-          const li = document.createElement('li');
-          li.innerHTML = `User: ${localStorage.display_name} Voted for: ${data.selection}`;
-          document.querySelector('#votes').append(li);
+
+
+      socket.on('vote totals', data => {
+          document.querySelector('#yes').innerHTML = data.yes;
+          document.querySelector('#no').innerHTML = data.no;
+          document.querySelector('#maybe').innerHTML = data.maybe;
       });
 
 
 
 
-
   });
-
-
-  /* Put the object into storage
-  localStorage.setItem('username', JSON.stringify(testObject));
-
-  // Retrieve the object from storage
-  var retrievedObject = localStorage.getItem('testObject');
-
-  console.log('retrievedObject: ', JSON.parse(retrievedObject));
-  */

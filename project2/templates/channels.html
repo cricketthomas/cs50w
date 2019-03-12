@@ -5,5 +5,27 @@ Channels
 {%endblock%}
 
 {%block body%}
-Channels
+
+
+
+<form id="create_channel" action="{{ url_for('new_channel') }}" method="post">
+    <input type="text" name="channel_name" id="channel_name">
+    <button type="submit">Create Channel</button>
+</form>
+<hr>
+
+<h3>channels {{channels}}</h3>
+
+<ul>
+    {% for channel in channels %}
+    <a href="{{ url_for('current_channel', channel_name=channel )}}">
+        <li>
+            {{channel}}
+        </li>
+    </a>
+    {% endfor %}
+</ul>
+
+
+
 {%endblock%}
