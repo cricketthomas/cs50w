@@ -59,3 +59,6 @@ def vote(data):
     votes[selection] += 1
     emit("vote totals", votes, broadcast=True)
 
+
+if __name__ == '__main__':
+    socketio.run(app, debug=True)
