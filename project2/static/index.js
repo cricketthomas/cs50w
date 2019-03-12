@@ -1,47 +1,47 @@
   //
   //
   //
-  //
-
   document.addEventListener('DOMContentLoaded', () => {
-      document.querySelector('#registered_form').onsubmit = () => {
+      // Once the page and contents loads
+      if (localStorage.getItem("display_name") === 'undefined' || localStorage.getItem("display_name") === null || localStorage.getItem("display_name") === "") {
+          document.querySelector("#registered_form").classList.remove("hide");
+          document.querySelector("#logged_in").classList.add("hide");
+          document.querySelector('#registered_form').onsubmit = function () {
+              // Store
+              const display_name = localStorage.setItem("display_name", document.querySelector("#username").value);
+              document.querySelector("#registered_form").classList.add("hide");
+              // Retrieve
+          };
+      } else {
+          document.querySelector("#display_name").innerHTML = localStorage.display_name;
 
-          // Initialize new request
-          const request = new XMLHttpRequest();
-          const username = document.querySelector('#username').value;
-          request.open('POST', '/registered');
-
-          // Callback function for when request completes
-          request.onload = () => {
-
-              // Extract JSON data from request
-              const data = JSON.parse(request.responseText);
-              // Update local storage
-              if (data.success) {
-                  const contents = `username is ${data.username}.`
-                  localStorage.setItem("username", data.username)
-                  localStorage.setItem("logged_in", data.success)
-                  document.querySelector('#result').innerHTML = contents;
-              } else {
-                  document.querySelector('#result').innerHTML = 'There was an error.';
-              }
-          }
-
-          // Add data to send with request
-          const data = new FormData();
-          data.append('username', username);
-          console.log(localStorage.username);
-          console.log(localStorage.success);
-          // Send request
-          request.send(data);
-
-          window.location.href = "/"
-
-          return false;
-      };
+      }
 
 
 
+      // Connect to websocket
+      var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
+      // When connected, configure buttons
+      socket.on('connect', () => {
+
+          // Each button should emit a "submit vote" event
+          document.querySelectorAll('button').forEach(button => {
+              button.onclick = () => {
+                  const selection = button.dataset.vote;
+                  socket.emit('submit vote', {
+                      'selection': selection,
+                  });
+              };
+          });
+      });
+
+      // When a new vote is announced, add to the unordered list
+      socket.on('announce vote', data => {
+          const li = document.createElement('li');
+          li.innerHTML = `User: ${localStorage.display_name} Voted for: ${data.selection}`;
+          document.querySelector('#votes').append(li);
+      });
 
 
 

@@ -2,3 +2,12 @@
     max-width: 30vw;
     margin: auto;
 }
+
+.hide {
+    display: none;
+    visibility: hidden;
+}
+
+.show {
+    border: 2px solid black;
+}

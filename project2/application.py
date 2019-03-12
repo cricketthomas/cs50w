@@ -1,10 +1,11 @@
 import os
+import requests
 
 from flask import Flask, render_template, request, flash, redirect, jsonify, url_for, session, jsonify
 from flask_session import Session
 from flask_socketio import SocketIO, emit
 
-
+# Configure socket.io 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
@@ -15,26 +16,20 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 
-@app.route("/", methods=["POST", "GET"])
+votes = {"yes": 0, "no": 0, "maybe": 0}
+
+@app.route("/")
 def index():
     message = "Flack App"
-    return render_template("index.html", message=message)
+    return render_template("index.html", message=message,votes=votes)
 
 
-@app.route('/registered', methods=["POST"])
-def registered():
-    username = request.form.get("username")
-    session['username'] = username
-    session["logged_in"] = True
-    return jsonify({"success": True, "username": username})
+@socketio.on("submit vote")
+def vote(data):
+    selection = data["selection"]
+    votes[selection] += 1
+    emit("vote totals", votes, broadcast=True)
 
-
-@app.route('/logout')
-def logout():
-    # remove the username from the session if it is there
-    session.pop('username', None)
-    session['logged_in'] = False
-    return redirect(url_for('index'))
 
 
 @app.route("/channels", methods=["POST", "GET"])

@@ -4,27 +4,23 @@
 Index
 {% endblock %}
 
-
 {%block body%}
-
-
 <h1>Flack App</h1>
-{% if session['logged_in'] %}
-<h2>
-    Hi {{session["username"]}}
-</h2>
-{%else%}
-Sign In
+
 <fieldset>
-    <form action="{{ url_for('registered') }}" method="post" id="registered_form">
+    <form id="registered_form" class="hide">
         <input class="form-control" name="username" placeholder="username" id="username">
-        <input type="submit" class="btn btn-primary">
+        <button type="submit" class="btn btn-primary">Create Name</button>
     </form>
 </fieldset>
-{% endif %}
 
-<br>
+
+<ul id="votes">
+</ul>
 <hr>
-<div id="result"></div>
+<button data-vote="yes">Yes</button>
+<button data-vote="no">No</button>
+<button data-vote="maybe">Maybe</button>
+
 
 {% endblock %}
