@@ -2,7 +2,7 @@
   //
   //
   document.addEventListener('DOMContentLoaded', () => {
-      var time =  new Date();
+      var time = new Date();
       // Once the page and contents loads
       if (localStorage.getItem("display_name") === 'undefined' || localStorage.getItem("display_name") === null || localStorage.getItem("display_name") === "") {
           document.querySelector("#registered_form").classList.remove("hide");
@@ -35,11 +35,21 @@
               };
           });
       });
+      // When a new vote is announced, add to the unordered list
 
+
+      socket.on('vote totals', data => {
+          document.querySelector('#yes').innerHTML = data.yes;
+          document.querySelector('#no').innerHTML = data.no;
+          document.querySelector('#maybe').innerHTML = data.maybe;
+      });
+
+
+      // Sending and Emit Messages
       socket.on('connect', () => {
-          console.log('connected 2');
+          console.log('connected message');
           document.querySelector('#send').onclick = function () {
-            const message = document.querySelector('#messages').value;
+              const message = document.querySelector('#messages').value;
 
               socket.emit('submit message', {
                   'message': message,
@@ -53,16 +63,6 @@
           li.innerHTML = `${data.user} says: ${data.message} at ${data.time}`;
           document.querySelector('#msg').append(li);
       });
-      // When a new vote is announced, add to the unordered list
-
-
-      socket.on('vote totals', data => {
-          document.querySelector('#yes').innerHTML = data.yes;
-          document.querySelector('#no').innerHTML = data.no;
-          document.querySelector('#maybe').innerHTML = data.maybe;
-      });
-
-
 
 
   });
