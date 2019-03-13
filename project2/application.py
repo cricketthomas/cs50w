@@ -26,7 +26,7 @@ channels = ["Default"]
 @app.route("/")
 def index():
     message = "Flack App"
-    return render_template("index.html", message=message)
+    return render_template("index.html", message=message, channels=channels)
 
 
 @app.route("/channel")
@@ -51,7 +51,7 @@ def current_channel(channel_name):
 
 # SOCKET.IO
 votes = {"yes": 0, "no": 0, "maybe": 0}
-message = [""]
+
 
 @socketio.on("submit vote")
 def vote(data):
@@ -62,12 +62,15 @@ def vote(data):
 
 @socketio.on("submit message")
 def message(data):
-    message = data["message"]
     emit("announce message", data, broadcast=True)
 
 
+@socketio.on("submit channel")
+def add_channel(data):
+    channels.append(data["channel"])
+    emit("announce channel", data, broadcast=True)
+    return render_template("index.html")
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     socketio.run(app, debug=False)

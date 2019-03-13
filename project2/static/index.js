@@ -36,8 +36,6 @@
           });
       });
       // When a new vote is announced, add to the unordered list
-
-
       socket.on('vote totals', data => {
           document.querySelector('#yes').innerHTML = data.yes;
           document.querySelector('#no').innerHTML = data.no;
@@ -45,7 +43,7 @@
       });
 
 
-      // Sending and Emit Messages
+      // Sending and Emiting Messages
       socket.on('connect', () => {
           console.log('connected message');
           document.querySelector('#send').onclick = function () {
@@ -63,6 +61,23 @@
           li.innerHTML = `${data.user} says: ${data.message} at ${data.time}`;
           document.querySelector('#msg').append(li);
       });
+
+      // Sending New Channels
+      socket.on('connect', () => {
+          console.log('connected channel');
+          document.querySelector('#submit_channel').onclick = function () {
+              const channel = document.querySelector('#create_channel').value;
+              socket.emit('submit channel', {
+                  'channel': channel,
+              });
+          };
+      });
+      socket.on('announce channel', data => {
+          console.log(data)
+      });
+
+
+
 
 
   });

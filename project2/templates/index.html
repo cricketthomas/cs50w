@@ -27,4 +27,32 @@ Index
 </ul>
 
 
+<hr>
+
+<h3>Add Channel</h3>
+<div>
+    <input type="text" name="create_channel" id="create_channel" placeholder="create channel">
+    <button id="submit_channel">Submit Channel</button>
+</div>
+
+
+
+<hr>
+<h3>Send Message to</h3>
+<hr>
+
+<div>Yes Votes: <span id="yes"></span></div>
+<div>No Votes: <span id="no"></span></div>
+<div>Maybe Votes: <span id="maybe"><span></div>
+<hr>
+<button data-vote="yes">Yes</button>
+<button data-vote="no">No</button>
+<button data-vote="maybe">Maybe</button>
+
+
+<hr><br>
+<input type="text" id="messages" placeholder="enter message">
+<button id="send">send</button>
+<ul id="msg"></ul>
+
 {% endblock %}
