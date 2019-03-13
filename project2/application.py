@@ -51,7 +51,7 @@ def current_channel(channel_name):
 
 # SOCKET.IO
 votes = {"yes": 0, "no": 0, "maybe": 0}
-
+message = [""]
 
 @socketio.on("submit vote")
 def vote(data):
@@ -60,5 +60,14 @@ def vote(data):
     emit("vote totals", votes, broadcast=True)
 
 
+@socketio.on("submit message")
+def message(data):
+    message = data["message"]
+    emit("announce message", data, broadcast=True)
+
+
+
+
+
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=False)

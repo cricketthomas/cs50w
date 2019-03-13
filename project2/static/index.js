@@ -2,6 +2,7 @@
   //
   //
   document.addEventListener('DOMContentLoaded', () => {
+      var time =  new Date();
       // Once the page and contents loads
       if (localStorage.getItem("display_name") === 'undefined' || localStorage.getItem("display_name") === null || localStorage.getItem("display_name") === "") {
           document.querySelector("#registered_form").classList.remove("hide");
@@ -17,12 +18,13 @@
 
       }
 
+
       // Connect to websocket
       var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
       // When connected, configure buttons
       socket.on('connect', () => {
-
+          console.log('connected');
           // Each button should emit a "submit vote" event
           document.querySelectorAll('button').forEach(button => {
               button.onclick = () => {
@@ -34,6 +36,23 @@
           });
       });
 
+      socket.on('connect', () => {
+          console.log('connected 2');
+          document.querySelector('#send').onclick = function () {
+            const message = document.querySelector('#messages').value;
+
+              socket.emit('submit message', {
+                  'message': message,
+                  'user': localStorage.getItem("display_name"),
+                  'time': time
+              });
+          };
+      });
+      socket.on('announce message', data => {
+          const li = document.createElement('li');
+          li.innerHTML = `${data.user} says: ${data.message} at ${data.time}`;
+          document.querySelector('#msg').append(li);
+      });
       // When a new vote is announced, add to the unordered list
 
 
@@ -47,3 +66,9 @@
 
 
   });
+
+  /*
+
+  document.getElementById("myButton").onclick = function () {
+          console.log("hi");
+      }*/
