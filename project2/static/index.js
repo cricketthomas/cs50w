@@ -48,13 +48,14 @@
           console.log('connected message');
           document.querySelector('#send').onclick = function () {
               const message = document.querySelector('#messages').value;
-
               socket.emit('submit message', {
                   'message': message,
                   'user': localStorage.getItem("display_name"),
                   'time': time
               });
+              document.getElementById('messages').value = "";
           };
+
       });
       socket.on('announce message', data => {
           const li = document.createElement('li');
@@ -62,15 +63,23 @@
           document.querySelector('#msg').append(li);
       });
 
+
+
+
       // Sending New Channels
       socket.on('connect', () => {
           console.log('connected channel');
-          document.querySelector('#submit_channel').onclick = function () {
-              const channel = document.querySelector('#create_channel').value;
-              socket.emit('submit channel', {
-                  'channel': channel,
-              });
-          };
+          try {
+              document.querySelector('#submit_channel').onclick = function () {
+                  const channel = document.querySelector('#create_channel').value;
+                  socket.emit('submit channel', {
+                      'channel': channel,
+                  });
+                  document.getElementById('create_channel').value = "";
+              };
+          } catch (error) {
+              console.log(`Error: ${error}`)
+          }
       });
       socket.on('announce channel', data => {
           console.log(data)

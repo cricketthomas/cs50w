@@ -69,7 +69,7 @@ def message(data):
 def add_channel(data):
     channels.append(data["channel"])
     emit("announce channel", data, broadcast=True)
-    return render_template("index.html")
+    print("channel added")
 
 
 if __name__ == "__main__":
