@@ -13,6 +13,7 @@ from flask import (
 )
 
 from flask_socketio import SocketIO, emit, send
+from collections import defaultdict
 
 # Configure socket.io
 app = Flask(__name__)
@@ -21,6 +22,8 @@ socketio = SocketIO(app)
 
 
 channels = ["Default"]
+
+messages = {}
 
 
 @app.route("/")
@@ -45,7 +48,10 @@ def new_channel():
 def current_channel(channel_name):
     channel_name = channel_name
     return render_template(
-        "current_channel.html", channel_name=channel_name, votes=votes
+        "current_channel.html",
+        channel_name=channel_name,
+        votes=votes,
+        messages=messages,
     )
 
 
@@ -62,15 +68,30 @@ def vote(data):
 
 @socketio.on("submit message")
 def message(data):
+    messages.setdefault(data["channel"], []).append(data["message"])
+    print(messages)
+    # emit("announce message", data, broadcast=True)
+    # messages[data["channel"]].append((data["user"], data["time"], data["message"]))
     emit("announce message", data, broadcast=True)
 
 
 @socketio.on("submit channel")
 def add_channel(data):
     channels.append(data["channel"])
-    emit("announce channel", data, broadcast=True)
+    emit("announce channel", data)
     print("channel added")
 
 
 if __name__ == "__main__":
     socketio.run(app, debug=False)
+
+"""
+ messages.update(
+        {
+            "channel": data["channel"],
+            "user": data["user"],
+            "message": data["message"],
+            "time": data["time"],
+        }
+    )
+"""

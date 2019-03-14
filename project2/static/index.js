@@ -3,6 +3,7 @@
   //
   document.addEventListener('DOMContentLoaded', () => {
       var time = new Date();
+      // Join Default Room
       // Once the page and contents loads
       if (localStorage.getItem("display_name") === 'undefined' || localStorage.getItem("display_name") === null || localStorage.getItem("display_name") === "") {
           document.querySelector("#registered_form").classList.remove("hide");
@@ -17,7 +18,6 @@
           document.querySelector("#display_name").innerHTML = localStorage.display_name;
 
       }
-
 
       // Connect to websocket
       var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
@@ -51,9 +51,14 @@
               socket.emit('submit message', {
                   'message': message,
                   'user': localStorage.getItem("display_name"),
-                  'time': time
+                  'time': time,
+                  'channel': document.querySelector('#channel').innerHTML
               });
               document.getElementById('messages').value = "";
+              socket.emit('join', {
+                  'channel': document.querySelector('#channel').innerHTML
+              });
+
           };
 
       });
@@ -61,6 +66,7 @@
           const li = document.createElement('li');
           li.innerHTML = `${data.user} says: ${data.message} at ${data.time}`;
           document.querySelector('#msg').append(li);
+          console.log(data["user"], data["message"])
       });
 
 
