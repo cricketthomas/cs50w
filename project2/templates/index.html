@@ -16,7 +16,7 @@ Index
 
 <hr>
 <h3>All Channels</h3>
-<ul>
+<ul id="channels_list">
     {% for channel in channels %}
     <a href="{{ url_for('current_channel', channel_name=channel )}}">
         <li>

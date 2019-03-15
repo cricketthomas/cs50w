@@ -91,17 +91,11 @@
           }
       });
       socket.on('announce channel', data => {
-          console.log(data)
+          const li = document.createElement('li');
+          li.innerHTML = "<a href=/channel/" + data.channel + ">" + data.channel + "</a>";
+          document.querySelector('#channels_list').append(li);
+
+          console.log(data.channel)
       });
 
-
-
-
-
   });
-
-  /*
-
-  document.getElementById("myButton").onclick = function () {
-          console.log("hi");
-      }*/
