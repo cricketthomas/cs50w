@@ -77,13 +77,13 @@ def message(data):
     # data = all_messages
     # emit("announce message", data, broadcast=True)
     # messages[data["channel"]].append((data["user"], data["time"], data["message"]))
-    emit("announce message", data)
+    emit("announce message", data, broadcast=True)
 
 
 @socketio.on("submit channel")
 def add_channel(data):
     channels.append(data["channel"])
-    emit("announce channel", data)
+    emit("announce channel", data, broadcast=True)
     print("channel added")
 
 
