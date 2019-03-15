@@ -3,7 +3,7 @@
   //
   document.addEventListener('DOMContentLoaded', () => {
       var time = new Date();
-      // Join Default Room
+      // Join Default Channel
       // Once the page and contents loads
       if (localStorage.getItem("display_name") === 'undefined' || localStorage.getItem("display_name") === null || localStorage.getItem("display_name") === "") {
           document.querySelector("#registered_form").classList.remove("hide");
@@ -49,10 +49,10 @@
           document.querySelector('#send').onclick = function () {
               const message = document.querySelector('#messages').value;
               socket.emit('submit message', {
-                  'message': message,
-                  'user': localStorage.getItem("display_name"),
-                  'time': time,
-                  'channel': document.querySelector('#channel').innerHTML
+                  "message": message,
+                  "user": localStorage.getItem("display_name"),
+                  "time": time,
+                  "channel": document.querySelector('#channel').innerHTML
               });
               document.getElementById('messages').value = "";
               socket.emit('join', {
@@ -64,9 +64,12 @@
       });
       socket.on('announce message', data => {
           const li = document.createElement('li');
-          li.innerHTML = `${data.user} says: ${data.message} at ${data.time}`;
-          document.querySelector('#msg').append(li);
-          console.log(data["user"], data["message"])
+          //var obj = JSON.stringify(data);
+          if (data.channel === document.querySelector('#channel').innerHTML) {
+              li.innerHTML = `${data.user} says: ${data.message} at ${data.time}`;
+              document.querySelector('#msg').append(li);
+          }
+          console.log(data)
       });
 
 

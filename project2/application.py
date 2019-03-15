@@ -11,8 +11,9 @@ from flask import (
     session,
     jsonify,
 )
-
+import json
 from flask_socketio import SocketIO, emit, send
+import collections
 from collections import defaultdict
 
 # Configure socket.io
@@ -68,11 +69,15 @@ def vote(data):
 
 @socketio.on("submit message")
 def message(data):
-    messages.setdefault(data["channel"], []).append(data["message"])
-    print(messages)
+    messages.setdefault(data["channel"], []).append(
+        {"message": data["message"], "user": data["user"], "time": data["time"]}
+    )
+    print(json.dumps(messages))
+    all_messages = json.dumps(messages)
+    # data = all_messages
     # emit("announce message", data, broadcast=True)
     # messages[data["channel"]].append((data["user"], data["time"], data["message"]))
-    emit("announce message", data, broadcast=True)
+    emit("announce message", data)
 
 
 @socketio.on("submit channel")
