@@ -57,15 +57,6 @@ def current_channel(channel_name):
 
 
 # SOCKET.IO
-votes = {"yes": 0, "no": 0, "maybe": 0}
-
-
-@socketio.on("submit vote")
-def vote(data):
-    selection = data["selection"]
-    votes[selection] += 1
-    emit("vote totals", votes, broadcast=True)
-
 
 @socketio.on("submit message")
 def message(data):
@@ -89,14 +80,3 @@ def add_channel(data):
 
 if __name__ == "__main__":
     socketio.run(app, debug=False)
-
-"""
- messages.update(
-        {
-            "channel": data["channel"],
-            "user": data["user"],
-            "message": data["message"],
-            "time": data["time"],
-        }
-    )
-"""

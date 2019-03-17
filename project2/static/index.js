@@ -22,44 +22,31 @@
       // Connect to websocket
       var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
-      // When connected, configure buttons
-      socket.on('connect', () => {
-          console.log('connected');
-          // Each button should emit a "submit vote" event
-          document.querySelectorAll('button').forEach(button => {
-              button.onclick = () => {
-                  const selection = button.dataset.vote;
-                  socket.emit('submit vote', {
-                      'selection': selection
-                  });
-              };
-          });
-      });
-      // When a new vote is announced, add to the unordered list
-      socket.on('vote totals', data => {
-          document.querySelector('#yes').innerHTML = data.yes;
-          document.querySelector('#no').innerHTML = data.no;
-          document.querySelector('#maybe').innerHTML = data.maybe;
-      });
 
 
       // Sending and Emiting Messages
       socket.on('connect', () => {
           console.log('connected message');
-          document.querySelector('#send').onclick = function () {
-              const message = document.querySelector('#messages').value;
-              socket.emit('submit message', {
-                  "message": message,
-                  "user": localStorage.getItem("display_name"),
-                  "time": time,
-                  "channel": document.querySelector('#channel').innerHTML
-              });
-              document.getElementById('messages').value = "";
-              socket.emit('join', {
-                  'channel': document.querySelector('#channel').innerHTML
-              });
+          try {
+              document.querySelector('#send').onclick = function () {
+                  const message = document.querySelector('#messages').value;
+                  socket.emit('submit message', {
+                      "message": message,
+                      "user": localStorage.getItem("display_name"),
+                      "time": time,
+                      "channel": document.querySelector('#channel').innerHTML
+                  });
+                  document.getElementById('messages').value = "";
+                  socket.emit('join', {
+                      'channel': document.querySelector('#channel').innerHTML
+                  });
 
-          };
+              };
+
+          } catch (error) {
+              console.log(`This page is missing elements causing: ${error}`);
+          }
+
 
       });
       socket.on('announce message', data => {
@@ -69,10 +56,8 @@
               li.innerHTML = `${data.user} says: ${data.message} at ${data.time}`;
               document.querySelector('#msg').append(li);
           }
-          console.log(data)
+          console.log(data);
       });
-
-
 
 
       // Sending New Channels
@@ -99,3 +84,26 @@
       });
 
   });
+
+  /*
+   // When connected, configure buttons
+      socket.on('connect', () => {
+          console.log('connected');
+          // Each button should emit a "submit vote" event
+          document.querySelectorAll('button').forEach(button => {
+              button.onclick = () => {
+                  const selection = button.dataset.vote;
+                  socket.emit('submit vote', {
+                      'selection': selection
+                  });
+              };
+          });
+      });
+      // When a new vote is announced, add to the unordered list
+      socket.on('vote totals', data => {
+          document.querySelector('#yes').innerHTML = data.yes;
+          document.querySelector('#no').innerHTML = data.no;
+          document.querySelector('#maybe').innerHTML = data.maybe;
+      });
+
+  */

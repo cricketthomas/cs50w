@@ -7,22 +7,24 @@
 <h1>
     This channel is: <span id="channel">{{channel_name}}</span>
 </h1>
+
 <hr>
-
-<div>Yes Votes: <span id="yes"></span></div>
-<div>No Votes: <span id="no"></span></div>
-<div>Maybe Votes: <span id="maybe"><span></div>
-<hr>
-<button data-vote="yes">Yes</button>
-<button data-vote="no">No</button>
-<button data-vote="maybe">Maybe</button>
-
-
-<hr><br>
+<br>
 <input type="text" id="messages" placeholder="enter message">
 <button id="send">send</button>
 <ul id="msg"></ul>
 
 <hr>
+
+<div>
+    <ul>
+        {% for msg in messages[channel_name]|reverse %}
+        <li>
+            {{ msg.user }} Says: {{ msg.message }} at {{ msg.time }}
+
+        </li>
+        {% endfor %}
+    </ul>
+</div>
 
 {%endblock%}
