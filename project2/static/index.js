@@ -1,7 +1,31 @@
   //
   //
   //
+
+
+
+
+
+  if (window.location.pathname.startsWith("/channel/")) {
+      window.onbeforeunload = function (event) {
+          event.returnValue = "Write something clever here..";
+          localStorage.setItem("last_page", window.location.pathname);
+          localStorage.setItem("closure_page", true);
+      };
+  }
+
+
+
+
   document.addEventListener('DOMContentLoaded', () => {
+
+      if (localStorage.getItem("closure_page") == true) {
+          console.log(localStorage.getItem("last_page"));
+          window.location.href = localStorage.getItem("last_page");
+          localStorage.setItem("closure_page", false);
+      }
+
+
       var time = new Date();
       // Join Default Channel
       // Once the page and contents loads
@@ -20,23 +44,10 @@
       }
 
 
-      if (localStorage.getItem("last_page") === null || localStorage.getItem("last_page") === "") {
-          localStorage.setItem("last_page", window.location.href);
-          console.log("no last page");
-      } else {
-          console.log("last page exists", localStorage.getItem("last_page"));
-          localStorage.setItem("last_page", window.location.href);
-          if (localStorage.getItem.last_page !== window.location.href) {
-              localStorage.setItem("last_page", window.location.href);
-          }
-      }
-
-
-
+      //localStorage.getItem("last_page") === null || localStorage.getItem("last_page") !== window.location.pathname
 
       // Connect to websocket
       var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
-
 
 
       // Sending and Emiting Messages
