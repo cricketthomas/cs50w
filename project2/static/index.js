@@ -31,7 +31,7 @@
           }
       }
 
-     
+
 
 
       // Connect to websocket
@@ -80,11 +80,23 @@
           console.log('connected channel');
           try {
               document.querySelector('#submit_channel').onclick = function () {
-                  const channel = document.querySelector('#create_channel').value;
-                  socket.emit('submit channel', {
-                      'channel': channel,
-                  });
-                  document.getElementById('create_channel').value = "";
+                  const channel = document.querySelector('#create_channel').value.trim();
+                  var existing_channels = [];
+                  var ul = document.getElementById("channels_list");
+                  var items = ul.getElementsByTagName("li");
+                  for (var i = 0; i < items.length; i++) {
+                      existing_channels.push(items[i].innerText.trim().toLowerCase());
+                  }
+                  console.log(existing_channels);
+
+                  if (existing_channels.indexOf(channel) >= 0) {
+                      alert("That channel already exists..");
+                  } else {
+                      socket.emit('submit channel', {
+                          'channel': channel
+                      });
+                      document.getElementById('create_channel').value = "";
+                  }
               };
           } catch (error) {
               console.log(`Error: ${error}`);
@@ -95,7 +107,7 @@
           li.innerHTML = "<a href=/channel/" + data.channel + ">" + data.channel + "</a>";
           document.querySelector('#channels_list').append(li);
 
-          console.log(data.channel)
+          console.log(data.channel);
       });
 
   });
