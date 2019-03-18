@@ -7,24 +7,23 @@
 <h1>
     This channel is: <span id="channel">{{channel_name}}</span>
 </h1>
-
-<hr>
-<br>
-<input type="text" id="messages" placeholder="enter message">
-<button id="send">send</button>
-<ul id="msg"></ul>
-
 <hr>
 
 <div>
-    <ul>
-        {% for msg in messages[channel_name]|reverse %}
+    <ul id="msg">
+        {# So this shows all the messages for the channel, gets the batch of 100, reverses the order then shows the first 100 aka last 100 since its reverses #}
+        {% for msg in messages[channel_name] | batch(100) | reverse | first  %}
         <li>
-            {{ msg.user }} Says: {{ msg.message }} at {{ msg.time }}
+            {{ msg.user }} says: {{ msg.message }} at {{ msg.time }}
 
         </li>
         {% endfor %}
     </ul>
 </div>
+
+
+<br>
+<input type="text" id="messages" placeholder="enter message">
+<button id="send">send</button>
 
 {%endblock%}

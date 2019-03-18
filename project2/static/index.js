@@ -19,6 +19,27 @@
 
       }
 
+
+      if (localStorage.getItem("last_page") === null || localStorage.getItem("last_page") === "") {
+          localStorage.setItem("last_page", window.location.href);
+          console.log("no last page");
+      } else {
+          console.log("last page exists", localStorage.getItem("last_page"));
+          localStorage.setItem("last_page", window.location.href);
+          if (localStorage.getItem.last_page !== window.location.href) {
+              localStorage.setItem("last_page", window.location.href);
+          }
+      }
+
+      window.addEventListener("beforeunload", function (event) {
+        // Cancel the event as stated by the standard.
+        event.preventDefault();
+        // Chrome requires returnValue to be set.
+        event.returnValue = '';
+      });
+
+
+
       // Connect to websocket
       var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 

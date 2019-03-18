@@ -23,7 +23,6 @@ socketio = SocketIO(app)
 
 
 channels = ["Default"]
-
 messages = {}
 
 
@@ -47,16 +46,13 @@ def new_channel():
 
 @app.route("/channel/<string:channel_name>")
 def current_channel(channel_name):
-    channel_name = channel_name
     return render_template(
-        "current_channel.html",
-        channel_name=channel_name,
-        votes=votes,
-        messages=messages,
+        "current_channel.html", channel_name=channel_name, messages=messages
     )
 
 
 # SOCKET.IO
+
 
 @socketio.on("submit message")
 def message(data):
