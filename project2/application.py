@@ -56,14 +56,18 @@ def current_channel(channel_name):
 
 @socketio.on("submit message")
 def message(data):
-    messages.setdefault(data["channel"], []).append(
-        {"message": data["message"], "user": data["user"], "time": data["time"]}
-    )
-    print(json.dumps(messages))
-    all_messages = json.dumps(messages)
-    # data = all_messages
-    # emit("announce message", data, broadcast=True)
-    # messages[data["channel"]].append((data["user"], data["time"], data["message"]))
+    #A bit repetitive, but it creates a default channel name for the channel, 
+    # then appends the message, or removes the first mesaage then appends the last one only storing the last 100.
+    messages.setdefault(data["channel"], [])
+    if len(messages[data["channel"]]) >= 100:
+        messages[data["channel"]].pop(0)
+        messages.setdefault(data["channel"], []).append({"message": data["message"], "user": data["user"], "time": data["time"]})
+
+    else:
+        messages.setdefault(data["channel"], []).append({"message": data["message"], "user": data["user"], "time": data["time"]})
+
+    #print(json.dumps(messages))
+    #all_messages = json.dumps(messages)
     emit("announce message", data, broadcast=True)
 
 

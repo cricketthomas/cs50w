@@ -31,13 +31,7 @@
           }
       }
 
-      window.addEventListener("beforeunload", function (event) {
-        // Cancel the event as stated by the standard.
-        event.preventDefault();
-        // Chrome requires returnValue to be set.
-        event.returnValue = '';
-      });
-
+     
 
 
       // Connect to websocket
@@ -93,7 +87,7 @@
                   document.getElementById('create_channel').value = "";
               };
           } catch (error) {
-              console.log(`Error: ${error}`)
+              console.log(`Error: ${error}`);
           }
       });
       socket.on('announce channel', data => {
