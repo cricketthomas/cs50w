@@ -13,8 +13,6 @@ from flask import (
 )
 import json
 from flask_socketio import SocketIO, emit, send
-import collections
-from collections import defaultdict
 
 # Configure socket.io
 app = Flask(__name__)
@@ -30,18 +28,6 @@ messages = {}
 def index():
     message = "Flack App"
     return render_template("index.html", message=message, channels=channels)
-
-
-@app.route("/channel")
-def channel():
-    return render_template("channels.html")
-
-
-@app.route("/new_channel", methods=["POST"])
-def new_channel():
-    new_channel = request.form.get("channel_name")
-    channels.append(new_channel)
-    return render_template("channels.html", channels=channels)
 
 
 @app.route("/channel/<string:channel_name>")
