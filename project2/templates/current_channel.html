@@ -16,8 +16,8 @@
         <li>
             {{ msg.user }} says: {{ msg.message }} at {{ msg.time }}
 
-        </li>
-        {% endfor %}
+            {#{msg.image}#}
+            {% endfor %}
     </ul>
 </div>
 
@@ -25,5 +25,7 @@
 <br>
 <input type="text" id="messages" placeholder="enter message">
 <button id="send">send</button>
-
+<div>
+    <input type="file" name="image" id="input">
+</div>
 {%endblock%}

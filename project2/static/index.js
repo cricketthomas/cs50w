@@ -56,11 +56,18 @@
           try {
               document.querySelector('#send').onclick = function () {
                   const message = document.querySelector('#messages').value;
+                  let image = document.getElementById('input').files[0];
+                  if (image === undefined) {
+                      image = "";
+                  } else {
+                      image = document.getElementById('input').files[0];
+                  }
                   socket.emit('submit message', {
                       "message": message,
                       "user": localStorage.getItem("display_name"),
                       "time": time,
-                      "channel": document.querySelector('#channel').innerHTML
+                      "channel": document.querySelector('#channel').innerHTML,
+                      "image": image
                   });
                   document.getElementById('messages').value = "";
                   socket.emit('join', {
@@ -79,7 +86,7 @@
           const li = document.createElement('li');
           //var obj = JSON.stringify(data);
           if (data.channel === document.querySelector('#channel').innerHTML) {
-              li.innerHTML = `${data.user} says: ${data.message} at ${data.time}`;
+              li.innerHTML = `${data.user} says: ${data.message} at ${data.time} ${data.image}`;
               document.querySelector('#msg').append(li);
           }
           console.log(data);

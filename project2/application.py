@@ -13,11 +13,16 @@ from flask import (
 )
 import json
 from flask_socketio import SocketIO, emit, send
+from werkzeug.utils import secure_filename
+
 
 # Configure socket.io
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
+
+# for image uploads
+UPLOAD_FOLDER = 'project2/static/images'
 
 
 channels = ["Default"]
@@ -42,18 +47,22 @@ def current_channel(channel_name):
 
 @socketio.on("submit message")
 def message(data):
-    #A bit repetitive, but it creates a default channel name for the channel, 
+
+    # A bit repetitive, but it creates a default channel name for the channel,
     # then appends the message, or removes the first mesaage then appends the last one only storing the last 100.
     messages.setdefault(data["channel"], [])
+
     if len(messages[data["channel"]]) >= 100:
         messages[data["channel"]].pop(0)
-        messages.setdefault(data["channel"], []).append({"message": data["message"], "user": data["user"], "time": data["time"]})
+        messages.setdefault(data["channel"], []).append(
+            {"message": data["message"], "user": data["user"], "time": data["time"], "image": data["image"]})
 
     else:
-        messages.setdefault(data["channel"], []).append({"message": data["message"], "user": data["user"], "time": data["time"]})
+        messages.setdefault(data["channel"], []).append(
+            {"message": data["message"], "user": data["user"], "time": data["time"], "image": data["image"]})
 
-    #print(json.dumps(messages))
-    #all_messages = json.dumps(messages)
+    # print(json.dumps(messages))
+    # all_messages = json.dumps(messages)
     emit("announce message", data, broadcast=True)
 
 
