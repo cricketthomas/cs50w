@@ -58,7 +58,7 @@
                   var ul = document.getElementById("users_list");
                   var items = ul.getElementsByTagName("li");
                   for (var i = 0; i < items.length; i++) {
-                    existing_users.push(items[i].innerText.trim().toLowerCase());
+                      existing_users.push(items[i].innerText.trim().toLowerCase());
                   }
                   console.log(existing_users);
 
@@ -152,6 +152,20 @@
           document.querySelector('#channels_list').append(li);
 
           console.log(data.channel);
+      });
+
+      socket.on("connect", () => {
+          console.log('connected logout');
+          document.querySelector('#logout').onclick = function () {
+              socket.emit('submit logout', {
+                  "user": localStorage.getItem("display_name")
+              });
+              localStorage.removeItem("display_name");
+          };
+      });
+
+      socket.on('announce logout', data => {
+          console.log(data);
       });
 
   });

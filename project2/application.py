@@ -82,5 +82,13 @@ def add_user(data):
     print("user added")
     print(users)
 
+@socketio.on("submit logout")
+def logout(data):
+    users.remove(data["user"])
+    emit("announce logout", data, broadcast=True)
+    print("removed", users)
+
+
+
 if __name__ == "__main__":
     socketio.run(app, debug=False)

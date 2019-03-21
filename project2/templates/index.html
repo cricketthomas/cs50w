@@ -18,14 +18,12 @@ Index
 <h3>Active Users</h3>
 <ul id="users_list">
     {% for user in users %}
-    <a href="{{ url_for('current_channel', channel_name=user )}}">
         <li>
             {{ user }}
         </li>
     </a>
     {% endfor %}
 </ul>
-
 
 
 <hr>
