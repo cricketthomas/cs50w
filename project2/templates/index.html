@@ -10,9 +10,23 @@ Index
 <fieldset>
     <form id="registered_form" class="hide">
         <input class="form-control" name="username" placeholder="username" id="username">
-        <button type="submit" class="btn btn-primary">Create Name</button>
+        <button type="submit" id="add_user" class="btn btn-primary">Create Name</button>
     </form>
 </fieldset>
+
+<hr>
+<h3>Active Users</h3>
+<ul id="users_list">
+    {% for user in users %}
+    <a href="{{ url_for('current_channel', channel_name=user )}}">
+        <li>
+            {{ user }}
+        </li>
+    </a>
+    {% endfor %}
+</ul>
+
+
 
 <hr>
 <h3>All Channels</h3>

@@ -43,12 +43,43 @@
 
       }
 
-
-      //localStorage.getItem("last_page") === null || localStorage.getItem("last_page") !== window.location.pathname
-
       // Connect to websocket
       var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
+
+
+      // show active users:
+      socket.on('connect', () => {
+          console.log('connected user');
+          try {
+              document.querySelector('#add_user').onclick = function () {
+                  const user = document.querySelector('#username').value.trim();
+                  var existing_users = [];
+                  var ul = document.getElementById("users_list");
+                  var items = ul.getElementsByTagName("li");
+                  for (var i = 0; i < items.length; i++) {
+                    existing_users.push(items[i].innerText.trim().toLowerCase());
+                  }
+                  console.log(existing_users);
+
+                  if (existing_users.indexOf(user) >= 0) {
+                      alert("That users already exists..");
+                  } else {
+                      socket.emit('submit user', {
+                          'user': user
+                      });
+                  }
+              };
+          } catch (error) {
+              console.log(`Error: ${error}`);
+          }
+      });
+      socket.on('announce user', data => {
+          //const li = document.createElement('li');
+          //li.innerHTML = "<a href=/channel/" + data.user + ">" + data.user + "</a>";
+          //document.querySelector('#users_list').append(li);
+          console.log(data.user);
+      });
 
       // Sending and Emiting Messages
       socket.on('connect', () => {
@@ -56,18 +87,13 @@
           try {
               document.querySelector('#send').onclick = function () {
                   const message = document.querySelector('#messages').value;
-                  let image = document.getElementById('input').files[0];
-                  if (image === undefined) {
-                      image = "";
-                  } else {
-                      image = document.getElementById('input').files[0];
-                  }
+                  //let image = document.getElementById('input').files[0];
                   socket.emit('submit message', {
                       "message": message,
                       "user": localStorage.getItem("display_name"),
                       "time": time,
                       "channel": document.querySelector('#channel').innerHTML,
-                      "image": image
+                      //"image": image
                   });
                   document.getElementById('messages').value = "";
                   socket.emit('join', {
@@ -86,7 +112,7 @@
           const li = document.createElement('li');
           //var obj = JSON.stringify(data);
           if (data.channel === document.querySelector('#channel').innerHTML) {
-              li.innerHTML = `${data.user} says: ${data.message} at ${data.time} ${data.image}`;
+              li.innerHTML = `${data.user} says: ${data.message} at ${data.time}`;
               document.querySelector('#msg').append(li);
           }
           console.log(data);

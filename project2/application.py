@@ -22,23 +22,23 @@ app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 
 # for image uploads
-UPLOAD_FOLDER = 'project2/static/images'
+UPLOAD_FOLDER = "project2/static/images"
 
 
 channels = ["Default"]
 messages = {}
-
+users = []
 
 @app.route("/")
 def index():
     message = "Flack App"
-    return render_template("index.html", message=message, channels=channels)
+    return render_template("index.html", message=message, channels=channels, users=users)
 
 
 @app.route("/channel/<string:channel_name>")
 def current_channel(channel_name):
     return render_template(
-        "current_channel.html", channel_name=channel_name, messages=messages
+        "current_channel.html", channel_name=channel_name, messages=messages, users=users
     )
 
 
@@ -55,11 +55,13 @@ def message(data):
     if len(messages[data["channel"]]) >= 100:
         messages[data["channel"]].pop(0)
         messages.setdefault(data["channel"], []).append(
-            {"message": data["message"], "user": data["user"], "time": data["time"], "image": data["image"]})
+            {"message": data["message"], "user": data["user"], "time": data["time"]}
+        )
 
     else:
         messages.setdefault(data["channel"], []).append(
-            {"message": data["message"], "user": data["user"], "time": data["time"], "image": data["image"]})
+            {"message": data["message"], "user": data["user"], "time": data["time"]}
+        )
 
     # print(json.dumps(messages))
     # all_messages = json.dumps(messages)
@@ -72,6 +74,13 @@ def add_channel(data):
     emit("announce channel", data, broadcast=True)
     print("channel added")
 
+
+@socketio.on("submit user")
+def add_user(data):
+    users.append(data["user"])
+    emit("announce user", data, broadcast=True)
+    print("user added")
+    print(users)
 
 if __name__ == "__main__":
     socketio.run(app, debug=False)
