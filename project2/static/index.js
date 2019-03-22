@@ -68,6 +68,8 @@
                       socket.emit('submit user', {
                           'user': user
                       });
+                      document.querySelector("#registered_form").classList.add("hide");
+                      document.querySelector("#logged_in").classList.remove("hide");
                   }
               };
           } catch (error) {
@@ -75,9 +77,9 @@
           }
       });
       socket.on('announce user', data => {
-          //const li = document.createElement('li');
-          //li.innerHTML = "<a href=/channel/" + data.user + ">" + data.user + "</a>";
-          //document.querySelector('#users_list').append(li);
+          const li = document.createElement('li');
+          li.innerHTML = data.user;
+          document.querySelector('#users_list').append(li);
           console.log(data.user);
       });
 
@@ -165,7 +167,16 @@
       });
 
       socket.on('announce logout', data => {
-          console.log(data);
+          var ul = document.getElementById("users_list");
+
+          ul.querySelectorAll('li').forEach(function (item) {
+              if (item.innerText == data.user)
+                  item.remove();
+              document.querySelector("#registered_form").classList.remove("hide");
+              document.querySelector("#logged_in").classList.add("hide");
+
+          });
+
       });
 
   });
