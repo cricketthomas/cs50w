@@ -1,12 +1,18 @@
-{%extends 'layout.html'%}
+{%extends 'index.html'%}
 {%block title%}
 {{channel_name}} Channel
 {%endblock%}
 
+
+
+
 {%block body%}
-<h1>
-    This channel is: <span id="channel">{{ channel_name }}</span>
-</h1>
+
+
+
+<h3>
+    <span id="channel">{{ channel_name }}</span>'s Messages
+</h3>
 <hr>
 
 <div>

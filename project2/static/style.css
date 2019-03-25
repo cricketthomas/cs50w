@@ -1,6 +1,12 @@
-.login_register {
-    max-width: 30vw;
-    margin: auto;
+.registered_form {
+    max-width: 20vw;
+    margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+    .registered_form {
+        max-width: 80vw;
+    }
 }
 
 .hide {
@@ -10,4 +16,15 @@
 
 .show {
     border: 2px solid black;
+}
+
+.centering {
+    display: flex;
+    justify-content: center;
+}
+
+.submit_btn {
+    padding: 2px;
+    display: flex;
+    justify-content: center;
 }

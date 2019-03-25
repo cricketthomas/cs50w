@@ -8,7 +8,7 @@
 
   if (window.location.pathname.startsWith("/channel/")) {
       window.onbeforeunload = function (event) {
-          event.returnValue = "Write something clever here..";
+          event.returnValue = "Are you sure you want to leave?.";
           localStorage.setItem("last_page", window.location.pathname);
           localStorage.setItem("closure_page", true);
       };
@@ -36,6 +36,7 @@
               // Store
               const display_name = localStorage.setItem("display_name", document.querySelector("#username").value);
               document.querySelector("#registered_form").classList.add("hide");
+
               // Retrieve
           };
       } else {
@@ -57,6 +58,7 @@
                   var existing_users = [];
                   var ul = document.getElementById("users_list");
                   var items = ul.getElementsByTagName("li");
+
                   for (var i = 0; i < items.length; i++) {
                       existing_users.push(items[i].innerText.trim().toLowerCase());
                   }
@@ -70,6 +72,7 @@
                       });
                       document.querySelector("#registered_form").classList.add("hide");
                       document.querySelector("#logged_in").classList.remove("hide");
+
                   }
               };
           } catch (error) {
@@ -150,7 +153,8 @@
       });
       socket.on('announce channel', data => {
           const li = document.createElement('li');
-          li.innerHTML = "<a href=/channel/" + data.channel + ">" + data.channel + "</a>";
+          li.classList.add("nav-item");
+          li.innerHTML = '<a class="nav-link" href=/channel/' + data.channel + ">" + data.channel + "</a>";
           document.querySelector('#channels_list').append(li);
 
           console.log(data.channel);
@@ -163,6 +167,7 @@
                   "user": localStorage.getItem("display_name")
               });
               localStorage.removeItem("display_name");
+              window.location.replace("/");
           };
       });
 
@@ -174,7 +179,6 @@
                   item.remove();
               document.querySelector("#registered_form").classList.remove("hide");
               document.querySelector("#logged_in").classList.add("hide");
-
           });
 
       });

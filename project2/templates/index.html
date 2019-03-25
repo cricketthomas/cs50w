@@ -4,48 +4,36 @@
 Index
 {% endblock %}
 
-{%block body%}
-<h1>Flack App</h1>
 
-<fieldset>
-    <form id="registered_form" class="hide">
-        <input class="form-control" name="username" placeholder="username" id="username">
-        <button type="submit" id="add_user" class="btn btn-primary">Create Name</button>
-    </form>
-</fieldset>
+
+
+{%block body%}
+
+<form id="registered_form" class="hide registered_form">
+    <h3 class="centering">Create a Username!</h3>
+    <input class="form-control" name="username" placeholder="username" id="username">
+    <div class="submit_btn"><button type="submit" id="add_user" class="btn btn-primary">Submit</button></div>
+</form>
+
 
 <hr>
 <h3>Active Users</h3>
 <ul id="users_list">
     {% for user in users %}
-        <li>
-            {{ user }}
-        </li>
+    <li>
+        {{ user }}
+    </li>
     </a>
     {% endfor %}
 </ul>
-
-
-<hr>
-<h3>All Channels</h3>
-<ul id="channels_list">
-    {% for channel in channels %}
-    <a href="{{ url_for('current_channel', channel_name=channel )}}">
-        <li>
-            {{ channel }}
-        </li>
-    </a>
-    {% endfor %}
-</ul>
-
-
-<hr>
 
 <h3>Add Channel</h3>
 <div>
     <input type="text" name="create_channel" id="create_channel" placeholder="create channel">
     <button id="submit_channel">Submit Channel</button>
 </div>
+
+
 
 
 

@@ -29,16 +29,23 @@ channels = ["Default"]
 messages = {}
 users = []
 
+
 @app.route("/")
 def index():
     message = "Flack App"
-    return render_template("index.html", message=message, channels=channels, users=users)
+    return render_template(
+        "index.html", message=message, channels=channels, users=users
+    )
 
 
 @app.route("/channel/<string:channel_name>")
 def current_channel(channel_name):
     return render_template(
-        "current_channel.html", channel_name=channel_name, messages=messages, users=users
+        "current_channel.html",
+        channel_name=channel_name,
+        channels=channels,
+        messages=messages,
+        users=users,
     )
 
 
@@ -82,12 +89,12 @@ def add_user(data):
     print("user added")
     print(users)
 
+
 @socketio.on("submit logout")
 def logout(data):
     users.remove(data["user"])
     emit("announce logout", data, broadcast=True)
     print("removed", users)
-
 
 
 if __name__ == "__main__":
