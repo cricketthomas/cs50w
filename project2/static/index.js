@@ -115,7 +115,9 @@
 
       });
       socket.on('announce message', data => {
+          var msg = document.querySelector("#msg")
           const div = document.createElement('div');
+          const wrapper = document.createElement('div');
           const h6 = document.createElement('h6');
           const small = document.createElement('small');
           const p = document.createElement('p');
@@ -126,11 +128,15 @@
               div.classList.add("d-flex", "w-100", "justify-content-between");
               h6.classList.add("mb-1");
               p.classList.add("mb-1");
+              wrapper.classList.add("msgAppendDiv");
               div.appendChild(h6);
               div.appendChild(small);
-              document.querySelector('#msg').append(div);
-              div.after(p)
+              wrapper.appendChild(div);
+              div.after(p);
+              msg.append(wrapper);
           }
+          msg.scrollTop = msg.scrollHeight;
+
       });
 
 

@@ -25,3 +25,20 @@
     display: flex;
     justify-content: center;
 }
+
+#msg {
+    overflow-y: scroll;
+    height: 75vh;
+    background-color: rgb(240, 238, 238);
+    padding: .25em;
+    border-radius: .5em;
+}
+
+
+.msgAppendDiv {
+    background-color: whitesmoke;
+    padding: .25em;
+    margin: .5em;
+    border-radius: .5em;
+
+}

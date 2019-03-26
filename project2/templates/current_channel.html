@@ -17,11 +17,14 @@
 
 <div class="list-group" id="msg">
     {% for msg in messages[channel_name] | batch(100) | reverse | first  %}
-    <div class="d-flex w-20 justify-content-between" id="msgAppendDiv">
-        <h6 class="mb-1"> {{ msg.user }} </h6>
-        <small>{{ msg.time }}</small>
+    <div class="msgAppendDiv">
+        <div class="d-flex w-20 justify-content-between">
+            <h6 class="mb-1"> {{ msg.user }} </h6>
+            <small>{{ msg.time }}</small>
+        </div>
+        <p class="mb-1">{{ msg.message }}</p>
     </div>
-    <p class="mb-1">{{ msg.message }}</p>
+
     {% endfor %}
 </div>
 
