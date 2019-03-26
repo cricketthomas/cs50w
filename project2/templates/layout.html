@@ -41,15 +41,44 @@
             </span>
 
         </div>
+
+
     </nav>
 
 
 
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header" id="users_list">
+                        Active Users
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for user in users %}
+                        <li class="list-group-item">{{ user }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
 
 
-    {% block body %}
+            </div>
+            <div class="col-8">
 
-    {% endblock body %}
+                {% block body %}
+
+                {% endblock body %}
+
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+
+
 
 
     <!-- Optional JavaScript -->

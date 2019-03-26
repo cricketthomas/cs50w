@@ -27,6 +27,7 @@
 
 
       var time = new Date();
+      console.log(time.toString())
       // Join Default Channel
       // Once the page and contents loads
       if (localStorage.getItem("display_name") === 'undefined' || localStorage.getItem("display_name") === null || localStorage.getItem("display_name") === "") {
@@ -96,7 +97,7 @@
                   socket.emit('submit message', {
                       "message": message,
                       "user": localStorage.getItem("display_name"),
-                      "time": time,
+                      "time": time.toUTCString(),
                       "channel": document.querySelector('#channel').innerHTML,
                       //"image": image
                   });
@@ -114,13 +115,22 @@
 
       });
       socket.on('announce message', data => {
-          const li = document.createElement('li');
-          //var obj = JSON.stringify(data);
+          const div = document.createElement('div');
+          const h6 = document.createElement('h6');
+          const small = document.createElement('small');
+          const p = document.createElement('p');
           if (data.channel === document.querySelector('#channel').innerHTML) {
-              li.innerHTML = `${data.user} says: ${data.message} at ${data.time}`;
-              document.querySelector('#msg').append(li);
+              h6.innerHTML = data.user;
+              p.innerHTML = data.message;
+              small.innerHTML = data.time;
+              div.classList.add("d-flex", "w-100", "justify-content-between");
+              h6.classList.add("mb-1");
+              p.classList.add("mb-1");
+              div.appendChild(h6);
+              div.appendChild(small);
+              document.querySelector('#msg').append(div);
+              div.after(p)
           }
-          console.log(data);
       });
 
 
