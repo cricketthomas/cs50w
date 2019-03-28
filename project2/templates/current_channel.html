@@ -1,15 +1,10 @@
-{%extends 'index.html'%}
-{%block title%}
-{{channel_name}} Channel
+{% extends 'index.html '%}
+{% block title %}
+{{ channel_name }} Channel
 {%endblock%}
 
 
-
-
 {%block body%}
-
-
-
 <h3>
     <span id="channel">{{ channel_name }}</span>'s Messages
 </h3>
@@ -24,14 +19,11 @@
         </div>
         <p class="mb-1">{{ msg.message }}</p>
     </div>
-
     {% endfor %}
 </div>
-
-
-
-<br>
-<input type="text" class="form-group" id="messages" placeholder="enter message">
-<button id="send">send</button>
+<div class="msg_input">
+    <div><input type="text" class="form-control" id="messages" placeholder="enter a message"></div>
+    <div><button id="send" class="btn btn-primary btn-sm">send</button></div>
+</div>
 
 {% endblock %}

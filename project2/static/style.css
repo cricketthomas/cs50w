@@ -7,13 +7,17 @@
     .registered_form {
         max-width: 80vw;
     }
+
+    .active_users {
+        display: none;
+        visibility: hidden;
+    }
 }
 
 .hide {
     display: none;
     visibility: hidden;
 }
-
 
 .centering {
     display: flex;
@@ -34,7 +38,6 @@
     border-radius: .5em;
 }
 
-
 .msgAppendDiv {
     background-color: whitesmoke;
     padding: .25em;
@@ -47,4 +50,22 @@
     margin-top: 2em;
 }
 
-#create_channel {}
+.msg_input {
+    position: relative;
+
+}
+
+.msg_input input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.msg_input button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: auto;
+    padding-bottom: .55em;
+    padding-top: .55em;
+
+}

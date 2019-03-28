@@ -50,11 +50,8 @@ def current_channel(channel_name):
 
 
 # SOCKET.IO
-
-
 @socketio.on("submit message")
 def message(data):
-
     # A bit repetitive, but it creates a default channel name for the channel,
     # then appends the message, or removes the first mesaage then appends the last one only storing the last 100.
     messages.setdefault(data["channel"], [])
@@ -69,9 +66,6 @@ def message(data):
         messages.setdefault(data["channel"], []).append(
             {"message": data["message"], "user": data["user"], "time": data["time"]}
         )
-
-    # print(json.dumps(messages))
-    # all_messages = json.dumps(messages)
     emit("announce message", data, broadcast=True)
 
 
@@ -86,7 +80,6 @@ def add_channel(data):
 def add_user(data):
     users.append(data["user"])
     emit("announce user", data, broadcast=True)
-    print("user added")
     print(users)
 
 
