@@ -1,4 +1,4 @@
-  //
+  //Flack Project 2 CS50w
   //
   //
 
@@ -83,6 +83,7 @@
       socket.on('announce user', data => {
           const li = document.createElement('li');
           li.innerHTML = data.user;
+          li.classList.add("list-group-item");
           document.querySelector('#users_list').append(li);
           console.log(data.user);
       });

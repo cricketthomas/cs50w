@@ -13,9 +13,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Flack - {% block title %}
-
-        {% endblock %}
+    <title>Flack - {% block title %} {% endblock %}
     </title>
 </head>
 
@@ -39,46 +37,33 @@
                 <div id="logged_in">user: <span id="display_name"></span>
                     <button id="logout" class="btn btn-primary btn-sm">logout</button>
             </span>
-
         </div>
-
-
     </nav>
-
-
-
     <div class="container">
         <div class="row">
-            <div class="col-sm">
+            <div class="col-sm active_users">
                 <div class="card" style="width: 18rem;">
-                    <div class="card-header" id="users_list">
+                    <div class="card-header">
                         Active Users
                     </div>
-                    <ul class="list-group list-group-flush">
+                    <ul class="list-group list-group-flush" id="users_list">
+                        {% if users|length == 0 %}
+                        <li class="list-group-item">No Users..</li>
+                        {% else %}
                         {% for user in users %}
                         <li class="list-group-item">{{ user }}</li>
                         {% endfor %}
+                        {% endif %}
                     </ul>
                 </div>
-
-
             </div>
             <div class="col-sm-8">
-
                 {% block body %}
 
                 {% endblock body %}
-
             </div>
-
-
-
         </div>
     </div>
-
-
-
-
 
 
     <!-- Optional JavaScript -->

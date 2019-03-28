@@ -7,10 +7,10 @@ Index
 
 
 
-{%block body%}
+{% block body %}
 
 <form id="registered_form" class="hide registered_form">
-    <h3 class="centering">Create a Username!</h3>
+    <h3 class="centering">Create username:</h3>
     <input class="form-control" name="username" placeholder="username" id="username">
     <div class="submit_btn"><button type="submit" id="add_user" class="btn btn-primary">Submit</button></div>
 </form>
@@ -19,10 +19,10 @@ Index
 <hr>
 
 
-<h3>Add Channel</h3>
-<div>
-    <input type="text" name="create_channel" id="create_channel" placeholder="create channel">
-    <button id="submit_channel">Submit Channel</button>
+<div class="registered_form">
+    <h3 class="centering">Add Channel:</h3>
+    <input type="text" class="form-control" name="create_channel" id="create_channel" placeholder="create channel">
+    <div class="submit_btn"><button id="submit_channel" class="btn btn-dark">Submit Channel</button></div>
 </div>
 
 
