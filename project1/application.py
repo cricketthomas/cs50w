@@ -227,3 +227,8 @@ def serverError(e):
 def badRequest(e):
     message = e
     return render_template('404.html', message=message), 400
+
+
+if __name__ == '__main__':
+    app.debug = True
+    app.run()
