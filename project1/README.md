@@ -1,6 +1,8 @@
 # Project 1 Web Programming with Python and JavaScript
 [Video Demonstrating the Site](https://youtu.be/fUOWlYM7bpI)
+
 Live demo: https://books-flaskapp.herokuapp.com
+
 This is a simple application that allows you to rate and review books stored in a psql db. Tech stack is Flask and SQL. 
 The Applications.py file contains all the logic for registering, logging in, searching, reviewing and api get requests. 
 The import.py file is used to import the CSV to the pSQL database. 
