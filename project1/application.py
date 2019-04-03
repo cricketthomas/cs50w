@@ -102,9 +102,8 @@ def loggedin():
 @app.route('/logout')
 def logout():
     # remove the username from the session if it is there
-    #session.pop('username', None)
+    session.pop('username', None)
     session.clear()
-    session['logged_in'] = False
     return render_template('login.html', message='bye')
 
 
