@@ -12,10 +12,11 @@ class Topping_option(models.Model):
 
 class Size_option(models.Model):
     size_options = (
-        ('SM', 'Small'),
-        ('LG', 'Large'),
+        ('Small', 'Small'),
+        ('Large', 'Large'),
     )
-    size = models.CharField(max_length=1, choices=size_options, default=None)
+    size = models.CharField(
+        max_length=5, choices=size_options)
 
     def __str__(self):
         return f"{self.size}"
@@ -24,6 +25,8 @@ class Size_option(models.Model):
 class Pizza(models.Model):
     selected_topping = models.ManyToManyField(
         Topping_option, blank=True, related_name="toppings")
+    selected_size = models.ForeignKey(
+        Size_option, on_delete=models.CASCADE, related_name="sizes")
 
     def __str__(self):
         return f"A pizza: {self.selected_topping}"
