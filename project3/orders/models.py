@@ -27,6 +27,7 @@ class Pizza(models.Model):
         Topping_option, blank=True, related_name="toppings")
     selected_size = models.ForeignKey(
         Size_option, on_delete=models.CASCADE, related_name="sizes")
+    specialty = models.BooleanField(default=False)
 
     def __str__(self):
         return f"A pizza: {self.selected_topping}"
