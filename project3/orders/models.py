@@ -32,4 +32,4 @@ class Pizza(models.Model):
     specialty = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"A pizza: {self.selected_topping}"
+        return f"A {self.selected_size} Specialty: {self.specialty}, pizza w/ {self.selected_topping.values_list()}"
