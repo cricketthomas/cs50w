@@ -18,7 +18,7 @@ class Size_option(models.Model):
         ('Large Sicilian', 'Large Sicilian'),
     )
     size = models.CharField(
-        max_length=5, choices=size_options)
+        max_length=25, choices=size_options)
 
     def __str__(self):
         return f"{self.size}"
