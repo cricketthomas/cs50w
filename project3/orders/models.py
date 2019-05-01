@@ -12,8 +12,10 @@ class Topping_option(models.Model):
 
 class Size_option(models.Model):
     size_options = (
-        ('Small', 'Small'),
-        ('Large', 'Large'),
+        ('Small Regular', 'Small Regular'),
+        ('Large Regular', 'Large Regular'),
+        ('Small Sicilian', 'Small Sicilian'),
+        ('Large Sicilian', 'Large Sicilian'),
     )
     size = models.CharField(
         max_length=5, choices=size_options)
