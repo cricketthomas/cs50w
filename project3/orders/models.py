@@ -43,7 +43,6 @@ class Pizza(models.Model):
 
 
 # Subs
-
 class Sub_extra(models.Model):
     extra = models.CharField(max_length=64)
 
@@ -107,6 +106,8 @@ class Salad(models.Model):
 
     def __str__(self):
         return f"{self.salads}"
+
+# Dinner platter
 
 
 class Dinner_platter(models.Model):
