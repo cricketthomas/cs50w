@@ -20,7 +20,7 @@ class Size_option(models.Model):
         ('LS', 'Large Sicilian'),
     )
     size = models.CharField(
-        max_length=25, choices=size_options)
+        max_length=64, choices=size_options)
 
     def __str__(self):
         return f"{self.size}"
@@ -32,6 +32,7 @@ class Pizza(models.Model):
     selected_size = models.ForeignKey(
         Size_option, on_delete=models.CASCADE, related_name="sizes")
     specialty = models.BooleanField(default=False)
+    price = models.DecimalField(max_digits=4, decimal_places=2, default=0)
 
     def __str__(self):
 
@@ -60,13 +61,13 @@ class Sub_option(models.Model):
 class Sub(models.Model):
     sub_options = models.ForeignKey(
         Sub_option, on_delete=models.CASCADE, related_name="Sub_options")
-
+    price = models.DecimalField(max_digits=4, decimal_places=2, default=0)
     sub_size = (
-        ('S', 'Small Sub'),
-        ('L', 'Large Sub'),
+        ('Small', 'Small Sub'),
+        ('Large', 'Large Sub'),
     )
     sub_sizes = models.CharField(
-        max_length=25, choices=sub_size)
+        max_length=64, choices=sub_size)
 
     extras = models.ManyToManyField(
         Sub_extra, blank=True, related_name="extras")
@@ -75,3 +76,48 @@ class Sub(models.Model):
 
     def __str__(self):
         return f"A {self.sub_sizes} size {self.sub_options} Sub Sandwich w/ {self.extras.values_list('extra', flat=True)}"
+
+
+# Pasta
+class Pasta(models.Model):
+    pasta_option = (
+        ('Mozzarella', 'Mozzarella'),
+        ('Meatballs', 'Meatballs'),
+        ('Chicken', 'Chicken'),
+    )
+    pastas = models.CharField(
+        max_length=64, choices=pasta_option)
+    price = models.DecimalField(max_digits=4, decimal_places=2, default=0)
+
+    def __str__(self):
+        return f"Baked Ziti w/ {self.pastas}"
+
+
+# Salad
+class Salad(models.Model):
+    salad_option = (
+        ('Garden Salad', 'Garden Salad'),
+        ('Greek Salad', 'Greek Salad'),
+        ('Antipasto', 'Antipasto'),
+        ('Salad w/Tuna', 'Salad w/Tuna'),
+    )
+    salads = models.CharField(
+        max_length=64, choices=salad_option)
+    price = models.DecimalField(max_digits=4, decimal_places=2, default=0)
+
+    def __str__(self):
+        return f"{self.salads}"
+
+
+class Dinner_platter(models.Model):
+    platter_size = (
+        ('Small', 'Small'),
+        ('Large', 'Large'),
+    )
+    platter_sizes = models.CharField(
+        max_length=64, choices=platter_size)
+    platters = models.CharField(max_length=64)
+    price = models.DecimalField(max_digits=4, decimal_places=2, default=0)
+
+    def __str__(self):
+        return f"{self.platter_sizes} {self.platters}"
