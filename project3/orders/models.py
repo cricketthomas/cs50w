@@ -108,8 +108,6 @@ class Salad(models.Model):
         return f"{self.salads}"
 
 # Dinner platter
-
-
 class Dinner_platter(models.Model):
     platter_size = (
         ('Small', 'Small'),

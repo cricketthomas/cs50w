@@ -1,0 +1,16 @@
+{% block body %}
+<h1>Register</h1>
+{% if message %}
+<div>
+    {{ message }}
+</div>
+{% endif %}
+<form action="{% url 'register' %}" method="post">
+    {% csrf_token %}
+    <input name="username" type="text" placeholder="username" />
+    <input name="password" type="password" placeholder="password" />
+    <input name="email" type="text" placeholder="email" />
+
+    <input type="submit" value="register" />
+</form>
+{% endblock %}
