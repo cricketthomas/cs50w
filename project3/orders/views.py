@@ -39,10 +39,13 @@ def register_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         email = request.POST.get('email')
-        user = User.objects.create_user(
-            username=username, password=password, email=email)
-        user.save()
-        user = authenticate(request, username=username, password=password)
+        if User.objects.filter(username=username).exists():
+            return render(request, "orders/register.html", {"message": "Username exists."})
+        else:
+            user = User.objects.create_user(
+                username=username, password=password, email=email)
+            user.save()
+            user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
             return HttpResponseRedirect(reverse("index"))
