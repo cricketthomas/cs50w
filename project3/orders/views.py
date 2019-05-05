@@ -1,9 +1,18 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+
+# import models
+from .models import Pizza, Pasta, Salad, Sub, Dinner_platter, Topping_option, Sub_extra, Size_option, Sub_option
+
+
+
+
 # Create your views here.
+
 
 
 def index(request):
@@ -57,5 +66,22 @@ def register_view(request):
             login(request, user)
             return HttpResponseRedirect(reverse("index"))
             # return render(request, "orders/login.html", {"message": "Invalid credentials."})
-
     return render(request, "orders/register.html")
+
+
+
+def menu_view(request):
+    context = {
+        "pizzas": Pizza.objects.all(),
+        "subs": Sub.objects.all(),
+        "pastas": Pasta.objects.all(),
+        "salads": Salad.objects.all(),
+        "dinner_platters": Dinner_platter.objects.all(),
+
+
+    }
+
+    if not request.user.is_authenticated:
+        return render(request, "orders/login.html", {"message": None})
+    return render(request, "orders/menu.html", context)
+

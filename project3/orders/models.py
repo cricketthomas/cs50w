@@ -37,9 +37,9 @@ class Pizza(models.Model):
     def __str__(self):
 
         if len(self.selected_topping.all()) >= 1:
-            return f"A {self.selected_size} Specialty: {self.specialty}, pizza w/ {self.selected_topping.values_list('topping', flat=True)}"
+            return f"A {self.selected_size} Specialty: {self.specialty}, pizza w/ {self.selected_topping.values_list('topping', flat=True)} {self.price}"
         else:
-            return f"A {self.selected_size} Specialty: {self.specialty}, Cheese pizza."
+            return f"A {self.selected_size} Specialty: {self.specialty}, Cheese pizza. {self.price}"
 
 
 # Subs
@@ -74,7 +74,7 @@ class Sub(models.Model):
     extra_cheese = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"A {self.sub_sizes} size {self.sub_options} Sub Sandwich w/ {self.extras.values_list('extra', flat=True)}"
+        return f"A {self.sub_sizes} size {self.sub_options} Sub Sandwich w/ {self.extras.values_list('extra', flat=True)} {self.price}"
 
 
 # Pasta
@@ -89,7 +89,7 @@ class Pasta(models.Model):
     price = models.DecimalField(max_digits=4, decimal_places=2, default=0)
 
     def __str__(self):
-        return f"Baked Ziti w/ {self.pastas}"
+        return f"Baked Ziti w/ {self.pastas} {self.price}"
 
 
 # Salad
@@ -105,7 +105,7 @@ class Salad(models.Model):
     price = models.DecimalField(max_digits=4, decimal_places=2, default=0)
 
     def __str__(self):
-        return f"{self.salads}"
+        return f"{self.salads} {self.price}"
 
 # Dinner platter
 class Dinner_platter(models.Model):
@@ -119,4 +119,9 @@ class Dinner_platter(models.Model):
     price = models.DecimalField(max_digits=4, decimal_places=2, default=0)
 
     def __str__(self):
-        return f"{self.platter_sizes} {self.platters}"
+        return f"{self.platter_sizes} {self.platters} {self.price}"
+
+
+# I need an orders model, 
+# i might need to refractor the models, have a price for the toppings, sizes and options tracking strategy 
+# then something to limit the topping unless its special pizza.
