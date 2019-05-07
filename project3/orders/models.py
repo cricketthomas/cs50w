@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -108,6 +109,8 @@ class Salad(models.Model):
         return f"{self.salads} {self.price}"
 
 # Dinner platter
+
+
 class Dinner_platter(models.Model):
     platter_size = (
         ('Small', 'Small'),
@@ -122,6 +125,19 @@ class Dinner_platter(models.Model):
         return f"{self.platter_sizes} {self.platters} {self.price}"
 
 
-# I need an orders model, 
-# i might need to refractor the models, have a price for the toppings, sizes and options tracking strategy 
+class Order(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, default=0)
+    pizza = models.ForeignKey(Pizza, on_delete=models.CASCADE, default=None)
+    sub = models.ForeignKey(Sub, on_delete=models.CASCADE, default=None)
+    platter = models.ForeignKey(
+        Dinner_platter, on_delete=models.CASCADE, default=None)
+    salad = models.ForeignKey(Salad, on_delete=models.CASCADE, default=None)
+    pasta = models.ForeignKey(Pasta, on_delete=models.CASCADE, default=None)
+    price = models.DecimalField(max_digits=4, decimal_places=2, default=0)
+
+    def __str__(self):
+        return f"{self.user}'s total {self.price}"
+# I need an orders model,
+# i might need to refractor the models, have a price for the toppings, sizes and options tracking strategy
 # then something to limit the topping unless its special pizza.

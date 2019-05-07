@@ -1,9 +1,10 @@
 from django.contrib import admin
 
-from .models import Pizza, Topping_option, Size_option, Sub, Sub_extra, Sub_option, Pasta, Salad, Dinner_platter
+from .models import Pizza, Topping_option, Size_option, Sub, Sub_extra, Sub_option, Pasta, Salad, Dinner_platter, Order
 
 
 # Register your models here.
+admin.site.register(Order)
 
 admin.site.register(Pizza)
 admin.site.register(Sub)

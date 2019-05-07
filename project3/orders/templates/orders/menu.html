@@ -6,66 +6,16 @@
 
 {% block body %}
 
+{% if message %}
+<div>
+    {{ message }}
+</div>
+{% endif %}
+
 <h1>Menu</h1>
 <hr>
 <h4>Pizzas</h4>
-<ul> 
-    {% for pizza in pizzas %}
-        <li>
-            {{ pizza }}
-        </li>
-    {% endfor %}
-</ul>
 <hr>
-<h4>Subs</h4>
-<ul> 
-    {% for sub in subs %}
-        <li>
-            {{ sub }}
-        </li>
-    {% endfor %}
-</ul>
-<hr>
-<h4>Pastas</h4>
-<ul> 
-    {% for pasta in pastas %}
-        <li>
-            {{ pasta }}
-        </li>
-    {% endfor %}
-</ul>
-<hr>
-<h4>Salads</h4>
-<ul> 
-    {% for salad in salads %}
-        <li>
-            {{ salad }}
-        </li>
-    {% endfor %}
-</ul>
-<hr>
-<h4>Dinner Platters</h4>
-<ul> 
-    {% for platter in dinner_platters %}
-        <li>
-            {{ platter.platters }} <strong>{{platter.price}}</strong> |  {{ platter.platter_sizes }}
-        </li>
-    {% endfor %}
-</ul>
-
-
-
-
-<div>
-    <h1>Cart</h1>
-    <div>
-        <h3>Order:</h3>
-    </div>
-    <div>
-        <h3>Total</h3>
-    </div>
-</div>
-
 
 
 {% endblock %}

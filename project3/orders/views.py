@@ -9,10 +9,7 @@ from django.urls import reverse
 from .models import Pizza, Pasta, Salad, Sub, Dinner_platter, Topping_option, Sub_extra, Size_option, Sub_option
 
 
-
-
 # Create your views here.
-
 
 
 def index(request):
@@ -69,7 +66,6 @@ def register_view(request):
     return render(request, "orders/register.html")
 
 
-
 def menu_view(request):
     context = {
         "pizzas": Pizza.objects.all(),
@@ -85,3 +81,16 @@ def menu_view(request):
         return render(request, "orders/login.html", {"message": None})
     return render(request, "orders/menu.html", context)
 
+
+'''
+def order(request, pizza_id):
+      try:
+          passenger_id = int(request.POST["passenger"])
+          pizza = Pizza.objects.get(pk=pizza_id)
+          passenger = Passenger.objects.get(pk=passenger_id)
+      except KeyError:
+          return render(request, "orders/menu.html", {"message": "No selection."})
+    
+      orders.add(pizza)
+      return HttpResponseRedirect(reverse("menu", args=(pizza_id,)))
+'''
