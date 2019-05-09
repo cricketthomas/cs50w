@@ -13,9 +13,48 @@
 {% endif %}
 
 <h1>Menu</h1>
-<hr>
-<h4>Pizzas</h4>
-<hr>
 
+<hr>
+<h2>Pizza</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ PizzaForm }}
+    <input type="submit" value="Submit" />
+</form>
+<hr>
+<h2>Pasta</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ PastaForm }}
+    <input type="submit" value="Submit" />
+</form>
+<hr>
+<h2>Subs</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ SubForm }}
+    <input type="submit" value="Submit" />
+</form>
+<hr>
+<h2>Salads</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ SaladForm }}
+    <input type="submit" value="Submit" />
+</form>
+<hr>
+<h2>Platters</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ PlatterForm }}
+    <input type="submit" value="Submit" />
+</form>
+<hr>
+<h1>Main Order Form</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ OrderForm }}
+    <input type="submit" value="Submit" />
+</form>
 
 {% endblock %}

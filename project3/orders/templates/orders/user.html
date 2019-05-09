@@ -4,6 +4,11 @@
 
 
 {% block body %}
+{% if message %}
+<div>
+    {{ message }}
+</div>
+{% endif %}
 <h1>Hello, {{ user.first_name }}</h1>
 <ul>
     <li>Currently logged in as: {{ user.username }}</li>

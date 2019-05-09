@@ -5,13 +5,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
+from .forms import PizzaForm, SubForm, PastaForm, SaladForm, PlatterForm, OrderForm
+
 # import models
 from .models import Pizza, Pasta, Salad, Sub, Dinner_platter, Topping_option, Sub_extra, Size_option, Sub_option
 
 
 # Create your views here.
-
-
 def index(request):
     if not request.user.is_authenticated:
         return render(request, "orders/login.html", {"message": None})
@@ -82,15 +82,24 @@ def menu_view(request):
     return render(request, "orders/menu.html", context)
 
 
-'''
-def order(request, pizza_id):
-      try:
-          passenger_id = int(request.POST["passenger"])
-          pizza = Pizza.objects.get(pk=pizza_id)
-          passenger = Passenger.objects.get(pk=passenger_id)
-      except KeyError:
-          return render(request, "orders/menu.html", {"message": "No selection."})
-    
-      orders.add(pizza)
-      return HttpResponseRedirect(reverse("menu", args=(pizza_id,)))
-'''
+def showform(request):
+    pizza_form = PizzaForm(request.POST or None)
+    sub_form = SubForm(request.POST or None)
+    pasta_form = PastaForm(request.POST or None)
+    platter_form = PlatterForm(request.POST or None)
+    salad_form = SaladForm(request.POST or None)
+    order_form = OrderForm(request.POST or None)
+
+    context = {'PizzaForm': pizza_form,
+               'PastaForm': pasta_form,
+               'SubForm': sub_form,
+               'SaladForm': salad_form,
+               'PlatterForm': platter_form,
+               'OrderForm': order_form
+               }
+
+    if order_form.is_valid():
+        order_form.save()
+
+        return render(request, "orders/user.html", {"message": "order form submitted."})
+    return render(request, "orders/menu.html", context)

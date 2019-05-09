@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.forms import ModelForm
 
 # Create your models here.
 
@@ -128,13 +129,18 @@ class Dinner_platter(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, default=0)
-    pizza = models.ForeignKey(Pizza, on_delete=models.CASCADE, default=None)
-    sub = models.ForeignKey(Sub, on_delete=models.CASCADE, default=None)
+    pizza = models.ForeignKey(
+        Pizza, on_delete=models.CASCADE, default=None, blank=True)
+    sub = models.ForeignKey(
+        Sub, on_delete=models.CASCADE, default=None, blank=True)
     platter = models.ForeignKey(
-        Dinner_platter, on_delete=models.CASCADE, default=None)
-    salad = models.ForeignKey(Salad, on_delete=models.CASCADE, default=None)
-    pasta = models.ForeignKey(Pasta, on_delete=models.CASCADE, default=None)
-    price = models.DecimalField(max_digits=4, decimal_places=2, default=0)
+        Dinner_platter, on_delete=models.CASCADE, default=None, blank=True)
+    salad = models.ForeignKey(
+        Salad, on_delete=models.CASCADE, default=None, blank=True)
+    pasta = models.ForeignKey(
+        Pasta, on_delete=models.CASCADE, default=None, blank=True)
+    price = models.DecimalField(
+        max_digits=4, decimal_places=2, default=0, blank=True)
 
     def __str__(self):
         return f"{self.user}'s total {self.price}"
