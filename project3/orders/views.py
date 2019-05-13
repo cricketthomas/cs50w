@@ -96,19 +96,21 @@ def showform(request):
                'PlatterForm': platter_form,
                'OrderForm': order_form,
                "orders": Order.objects.all()
-
                }
 
     if order_form.is_valid():
         new_order = order_form.save(commit=False)
         new_order.user = request.user
         # how i will do add to order feature, each form will remain seperate then one final submit button.
-        print(new_order.sub)
-        new_order.save()
-        #new_order = Order(pizza=pizza_form)
-        # order_form.save(new_order)
         return render(request, "orders/user.html", {"message": "order form submitted."})
     return render(request, "orders/menu.html", context)
+
+
+def create_item(request, item_type):
+    if item_type == 1:
+        context = {'PizzaForm': pizza_form}
+
+    return render(request, "orders/create.html", context)
 
 
 def order_view(request):
@@ -118,4 +120,4 @@ def order_view(request):
 
     if not request.user.is_authenticated:
         return render(request, "orders/login.html", {"message": None})
-    return render(request, "orders/cart.html", context)
+    return render(request, "orders/ordered_items.html", context)
