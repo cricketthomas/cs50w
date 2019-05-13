@@ -1,0 +1,20 @@
+{% extends "orders/index.html" %}
+
+{% block title %} Cart {% endblock  %}
+
+{% block body %}
+
+<h2>Submitted Orders</h2>
+<hr>
+{% for order in orders %}
+<ul>
+    <li>{{ order.pizza }}</li>
+    <li>{{ order.sub }}</li>
+    <li>{{ order.platter }}</li>
+    <li>{{ order.sub }}</li>
+    <li>{{ order.pasta }}</li>
+    <li>{{ order.salad }}</li>
+</ul>
+<hr>
+{% endfor %}
+{% endblock %}

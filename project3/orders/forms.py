@@ -35,4 +35,5 @@ class PlatterForm(forms.ModelForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ["user", "pizza", "sub", "platter", "salad", "pasta"]
+        fields = ["pizza", "sub", "platter", "salad", "pasta"]
+        #widgets = {'user': forms.HiddenInput()}

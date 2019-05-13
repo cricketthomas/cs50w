@@ -8,7 +8,7 @@ from django.urls import reverse
 from .forms import PizzaForm, SubForm, PastaForm, SaladForm, PlatterForm, OrderForm
 
 # import models
-from .models import Pizza, Pasta, Salad, Sub, Dinner_platter, Topping_option, Sub_extra, Size_option, Sub_option
+from .models import Pizza, Pasta, Salad, Sub, Dinner_platter, Topping_option, Sub_extra, Size_option, Sub_option, Order
 
 
 # Create your views here.
@@ -73,8 +73,7 @@ def menu_view(request):
         "pastas": Pasta.objects.all(),
         "salads": Salad.objects.all(),
         "dinner_platters": Dinner_platter.objects.all(),
-
-
+        "orders": Order.objects.all()
     }
 
     if not request.user.is_authenticated:
@@ -95,11 +94,28 @@ def showform(request):
                'SubForm': sub_form,
                'SaladForm': salad_form,
                'PlatterForm': platter_form,
-               'OrderForm': order_form
+               'OrderForm': order_form,
+               "orders": Order.objects.all()
+
                }
 
     if order_form.is_valid():
-        order_form.save()
-
+        new_order = order_form.save(commit=False)
+        new_order.user = request.user
+        # how i will do add to order feature, each form will remain seperate then one final submit button.
+        print(new_order.sub)
+        new_order.save()
+        #new_order = Order(pizza=pizza_form)
+        # order_form.save(new_order)
         return render(request, "orders/user.html", {"message": "order form submitted."})
     return render(request, "orders/menu.html", context)
+
+
+def order_view(request):
+    context = {
+        "orders": Order.objects.filter(user=request.user)
+    }
+
+    if not request.user.is_authenticated:
+        return render(request, "orders/login.html", {"message": None})
+    return render(request, "orders/cart.html", context)
